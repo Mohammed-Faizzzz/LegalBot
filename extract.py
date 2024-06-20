@@ -61,12 +61,11 @@ def extract_pdf_data(pdf_path):
     # Create DataFrames
     initial_df = pd.DataFrame([initial_data])
     paragraph_data = []
-    subtitle = "Intro"
     
     for num, para in paragraphs:
         paragraph_data.append({
             "Title": title,
-            "Subtitle": subtitle,
+            # "Subtitle": subtitle,
             "Paragraph": f"Para {num}\n{para.strip()}"
         })
     
