@@ -8,8 +8,6 @@ def extract_pdf_data(pdf_path):
     for page in doc:
         text += page.get_text()
     
-    print(text[:1000])
-    
     # Extract Title
     title_pattern = re.compile(r"\[\d{4}\] SGHC \d+")
     title_match = title_pattern.search(text)
@@ -19,7 +17,6 @@ def extract_pdf_data(pdf_path):
     parties_pattern = re.compile(r"\[\d{4}\] SGHC \d+.*?Between(.*?)JUDGMENT", re.DOTALL)
     parties_match = parties_pattern.search(text)
     parties = parties_match.group(1).strip() if parties_match else "Parties not found"
-    print(parties)
     # Extract Classification
     pattern = r"JUDGMENT.*?(\[.*?\])"
     
