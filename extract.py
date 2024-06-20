@@ -16,16 +16,10 @@ def extract_pdf_data(pdf_path):
     title = title_match.group(0) if title_match else "Title not found"
     
     # Extract Parties Involved
-    parties_pattern = re.compile(r"Between\n(.+?)\n… Claimants\nAnd\n(.+?)\n… Defendant/Applicant\nAnd\n(.+?)\n… Non-Party/Respondent", re.DOTALL)
+    parties_pattern = re.compile(r"\[\d{4}\] SGHC \d+.*?Between(.*?)JUDGMENT", re.DOTALL)
     parties_match = parties_pattern.search(text)
-    if parties_match:
-        claimants = parties_match.group(1).strip()
-        defendant = parties_match.group(2).strip()
-        non_party = parties_match.group(3).strip()
-        parties = f"{claimants}, Claimants; {defendant}, Defendant/Applicant; {non_party}, Non-Party/Respondent"
-    else:
-        parties = "Parties not found"
-    
+    parties = parties_match.group(1).strip() if parties_match else "Parties not found"
+    print(parties)
     # Extract Classification
     pattern = r"JUDGMENT.*?(\[.*?\])"
     
@@ -91,7 +85,7 @@ def extract_pdf_data(pdf_path):
     return initial_df, paragraphs_df
 
 # Use the function
-pdf_path = "pdfs/[2024] SGHC 141.pdf"
+pdf_path = "pdfs/[2024] SGHC 135.pdf"
 initial_df, paragraphs_df = extract_pdf_data(pdf_path)
 print("Initial Data:")
 print(initial_df)
