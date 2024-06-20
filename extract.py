@@ -8,6 +8,8 @@ def extract_pdf_data(pdf_path):
     for page in doc:
         text += page.get_text()
     
+    print(text[:1000])
+    
     # Extract Title
     title_pattern = re.compile(r"\[\d{4}\] SGHC \d+")
     title_match = title_pattern.search(text)
@@ -25,10 +27,21 @@ def extract_pdf_data(pdf_path):
         parties = "Parties not found"
     
     # Extract Classification
-    classification_pattern = re.compile(r"\[(.+?)\]", re.DOTALL)
-    classification_match = classification_pattern.search(text)
-    classification = classification_match.group(0) if classification_match else "Classification not found"
+    pattern = r"JUDGMENT.*?(\[.*?\])"
     
+    # Search for all matches in the text
+    matches = re.findall(pattern, text, re.DOTALL)
+    
+    # Extract the enclosed information from each match
+    extracted_info = []
+    for match in matches:
+        # Find all bracketed parts within each match
+        individual_infos = re.findall(r"\[.*?\]", match)
+        extracted_info.extend(individual_infos)
+    classification = ", ".join(extracted_info)
+    
+    print(classification)
+
     # Extract Date
     date_pattern = re.compile(r"Version No \d+: (\d{2} \w+ \d{4})")
     date_match = date_pattern.search(text)
@@ -82,5 +95,5 @@ pdf_path = "pdfs/[2024] SGHC 141.pdf"
 initial_df, paragraphs_df = extract_pdf_data(pdf_path)
 print("Initial Data:")
 print(initial_df)
-print("\nParagraphs Data:")
-print(paragraphs_df)
+# print("\nParagraphs Data:")
+# print(paragraphs_df)
