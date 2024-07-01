@@ -117,6 +117,7 @@ num_epochs = 3
 model.train()
 
 for epoch in range(num_epochs):
+    print(f"Epoch {epoch + 1}")
     for batch in dataloader:
         optimizer.zero_grad()
         
