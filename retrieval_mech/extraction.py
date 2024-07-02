@@ -2,6 +2,18 @@ import fitz  # PyMuPDF
 import re
 
 def extract_data(pdf_path):
+    """
+    Extracts data from a PDF file.
+
+    Args:
+        pdf_path (str): The path to the PDF file.
+
+    Returns:
+        dict: A dictionary containing the extracted data. The dictionary has two keys:
+            - "Title": The title of the document, extracted from the PDF text.
+            - "Text": The full text content of the PDF.
+
+    """
     doc = fitz.open(pdf_path)
     text = ""
     for page in doc:
@@ -20,7 +32,3 @@ def extract_data(pdf_path):
         "Text": text
     }
     return data
-
-# pdf_path = "./../pdfs/[2024] SGHC 133.pdf"
-# data = extract_data(pdf_path)
-# print(data["Title"])

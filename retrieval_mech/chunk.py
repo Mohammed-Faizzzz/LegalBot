@@ -6,6 +6,19 @@ import pickle
 import os
 
 def split_into_chunks(text, title, max_length=512, overlap=50):
+    """
+    Splits the given text into chunks based on the maximum length and overlap.
+
+    Args:
+        text (str): The input text to be split into chunks.
+        title (str): The title of the text.
+        max_length (int, optional): The maximum length of each chunk. Defaults to 512.
+        overlap (int, optional): The number of words to overlap between chunks. Defaults to 50.
+
+    Returns:
+        list: A list of chunks, where each chunk is a string.
+
+    """
     sentences = sent_tokenize(text)
     chunks = []
     chunk = ""
@@ -18,10 +31,14 @@ def split_into_chunks(text, title, max_length=512, overlap=50):
     chunks.append(f"[TITLE: {title}] " + chunk.strip())
     return chunks
 
-# Extract text from PDF
-pdf_dir = './../pdfs'
 
-# List all PDF files in the directory
+
+"""
+Iterate over all pdf files, extract their title and text, then chunk them. Store ALL chunks
+in a single pickle file.
+
+"""
+pdf_dir = './../pdfs'
 pdf_files = [os.path.join(pdf_dir, file) for file in os.listdir(pdf_dir) if file.endswith('.pdf')]
 
 all_chunks = []
@@ -34,9 +51,7 @@ for pdf in pdf_files:
     chunks = split_into_chunks(text, title)
     all_chunks.extend(chunks)
 
-# Save all chunks to a single pickle file
 with open('all_chunks.pkl', 'wb') as f:
     pickle.dump(all_chunks, f)
 
 print(f"Total chunks processed: {len(all_chunks)}")
-print("Sample chunk: ", all_chunks[1][:500])
