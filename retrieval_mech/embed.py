@@ -1,11 +1,11 @@
 import torch
 from transformers import AutoTokenizer, AutoModel
 import numpy as np
-from extraction import extract_text_from_pdf
+from extraction import extract_data
 from chunk import split_into_chunks
 import pickle
 
-chunks = pickle.load(open('chunks.pkl', 'rb'))
+chunks = pickle.load(open('all_chunks.pkl', 'rb'))
 
 model_name = "distilbert-base-uncased"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
