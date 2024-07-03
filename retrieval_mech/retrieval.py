@@ -9,7 +9,7 @@ model = AutoModel.from_pretrained(model_name)
 
 embeddings = np.load('embeddings.npy')
 index = faiss.read_index('legal_cases.index')
-with open('chunks.pkl', 'rb') as f:
+with open('all_chunks.pkl', 'rb') as f:
     chunks = pickle.load(f)
 
 def generate_question_embedding(question, tokenizer, model):
@@ -28,8 +28,7 @@ def retrieve_chunks(question, index, chunks, tokenizer, model, top_k=5):
     retrieved_chunks = [chunks[idx] for idx in I[0]]
     return retrieved_chunks
 
-
-question = "Who was the seller's expert in the case?"
+question = "What was the court's conclusion in [2024] SGHC 149?"
 retrieved_chunks = retrieve_chunks(question, index, chunks, tokenizer, model)
 
 print(f"Question: {question}")
