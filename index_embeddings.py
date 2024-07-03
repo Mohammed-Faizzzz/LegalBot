@@ -22,3 +22,5 @@ def index_embeddings():
 
     # Save
     faiss.write_index(index, 'legal_cases.index')
+
+index_embeddings()

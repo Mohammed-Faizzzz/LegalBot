@@ -4,6 +4,9 @@ from nltk.tokenize import sent_tokenize
 from extraction import extract_data
 import pickle
 import os
+from preprocess import generate_legal_questions
+import random
+import csv
 
 def split_into_chunks(text, title, max_length=512, overlap=50):
     """
@@ -43,15 +46,17 @@ pdf_files = [os.path.join(pdf_dir, file) for file in os.listdir(pdf_dir) if file
 
 all_chunks = []
 
+all_qns = []
+
 for pdf in pdf_files:
     print(f"Processing: {pdf}")
     data = extract_data(pdf)
     title = data["Title"]
     text = data["Text"]
+
+    # Split the text into chunks and store them
     chunks = split_into_chunks(text, title)
     all_chunks.extend(chunks)
 
 with open('all_chunks.pkl', 'wb') as f:
     pickle.dump(all_chunks, f)
-
-print(f"Total chunks processed: {len(all_chunks)}")
