@@ -16,7 +16,7 @@ def index_embeddings():
     embeddings = np.load('embeddings.npy')
     d = embeddings.shape[1]  # Dimensions
     quantizer = faiss.IndexFlatL2(d)
-    index = faiss.IndexIVFFlat(quantizer, d, 100, faiss.METRIC_L2)
+    index = faiss.IndexIVFFlat(quantizer, d, 50, faiss.METRIC_L2)
     index.train(embeddings)
     index.add(embeddings)
 
