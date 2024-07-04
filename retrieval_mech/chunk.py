@@ -1,6 +1,6 @@
 import nltk
 nltk.download('punkt')
-from nltk.tokenize import sent_tokenize
+from nltk.tokenize import sent_tokenize, word_tokenize
 from extraction import extract_data
 import pickle
 import os
@@ -20,18 +20,27 @@ def split_into_chunks(text, title, max_length=512, overlap=50):
 
     Returns:
         list: A list of chunks, where each chunk is a string.
-
     """
     sentences = sent_tokenize(text)
     chunks = []
-    chunk = ""
+    chunk = []
+    chunk_length = 0
+    
     for sentence in sentences:
-        if len(chunk) + len(sentence) > max_length:
-            chunks.append(f"[TITLE: {title}] " + chunk.strip())
-            chunk = " ".join(chunk.split()[-overlap:]) + " " + sentence
+        sentence_tokens = word_tokenize(sentence)
+        sentence_length = len(sentence_tokens)
+        
+        if chunk_length + sentence_length > max_length:
+            chunks.append(f"[TITLE: {title}] " + " ".join(chunk).strip())
+            chunk = chunk[-overlap:] + sentence_tokens
+            chunk_length = len(chunk)
         else:
-            chunk += " " + sentence
-    chunks.append(f"[TITLE: {title}] " + chunk.strip())
+            chunk.extend(sentence_tokens)
+            chunk_length += sentence_length
+    
+    if chunk:
+        chunks.append(f"[TITLE: {title}] " + " ".join(chunk).strip())
+    
     return chunks
 
 
