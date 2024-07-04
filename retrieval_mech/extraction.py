@@ -16,6 +16,8 @@ def extract_data(pdf_path):
     """
     doc = fitz.open(pdf_path)
     text = ""
+    first_page = doc[0]
+
     for page in doc:
         text += page.get_text()
 
@@ -25,6 +27,17 @@ def extract_data(pdf_path):
     title = title_match.group(0) if title_match else "Title not found"
 
     # Extract Category
+    first_page_text = first_page.get_text()
+    pad = len("JUDGMENT")
+    judgment_start = first_page_text.find("JUDGMENT")
+    if judgment_start == -1:
+        judgment_start = first_page_text.find("GROUNDS OF DECISION")
+        pad = len("GROUNDS OF DECISION")
+    version_start = first_page_text.find("Version")
+    category = first_page_text[judgment_start + pad: version_start]
+
+    print(category)
+
     # Extract Parties Involved
 
     data = {
@@ -32,3 +45,6 @@ def extract_data(pdf_path):
         "Text": text
     }
     return data
+
+pdf_dir = './../pdfs/[2024] SGHC 145.pdf'
+data = extract_data(pdf_dir) 
