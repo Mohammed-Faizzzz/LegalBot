@@ -23,14 +23,16 @@ def retrieve_chunks(question, index, chunks, tokenizer, model, top_k=5):
     question_embedding = generate_question_embedding(question, tokenizer, model)
     
     D, I = index.search(question_embedding, k=top_k)
+    print(I[0])
     
     # Retrieve the top chunks (i.e best matches)
     retrieved_chunks = [chunks[idx] for idx in I[0]]
     return retrieved_chunks
 
-question = "What was the court's conclusion in [2024] SGHC 149?"
+question = "What are the key considerations for varying or rescinding a maintenance order when the paying spouse retires and claims changed financial circumstances, particularly in cases involving elderly parties?"
 retrieved_chunks = retrieve_chunks(question, index, chunks, tokenizer, model)
 
 print(f"Question: {question}")
-for i, chunk in enumerate(retrieved_chunks):
-    print(f"\nRetrieved Chunk {i + 1}: {chunk[:500]}...")
+print(f"Retrieved Chunks: {retrieved_chunks}")
+# for i, chunk in enumerate(retrieved_chunks):
+#     print(f"\nRetrieved Chunk {i + 1}: {chunk}")
