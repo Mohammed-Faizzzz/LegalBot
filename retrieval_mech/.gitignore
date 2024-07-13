@@ -4,3 +4,10 @@ embeddings.npy
 legal_cases.index
 qa_dataset.json
 /__pycache__
+/dataset
+/my_qa_model
+/results
+/tokenized_dataset
+dataset.json
+dataset.csv
+legal_qa_dataset.json

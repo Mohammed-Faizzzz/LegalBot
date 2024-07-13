@@ -36,8 +36,6 @@ def extract_data(pdf_path):
     version_start = first_page_text.find("Version")
     category = first_page_text[judgment_start + pad: version_start]
 
-    print(category)
-
     # Extract Parties Involved
 
     data = {
@@ -45,6 +43,3 @@ def extract_data(pdf_path):
         "Text": text
     }
     return data
-
-pdf_dir = './../pdfs/[2024] SGHC 145.pdf'
-data = extract_data(pdf_dir) 
