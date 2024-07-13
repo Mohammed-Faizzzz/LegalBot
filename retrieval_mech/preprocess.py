@@ -1,120 +1,92 @@
-import spacy
-import random
-import re
-import pickle
+import pandas as pd
+from datasets import Dataset
+from transformers import AutoTokenizer
+from sentence_transformers import SentenceTransformer
+import torch
 
-"""
-Generates Question Answer pairs for training of QA model from text chunks.
-"""
+# Load your data
+df = pd.read_csv('dataset.csv')
 
-nlp = spacy.load("en_core_web_sm")
+# Convert to Hugging Face Dataset
+dataset = Dataset.from_pandas(df)
 
-def generate_legal_questions(text, title):
-    doc = nlp(text)
-    questions = []
+# Split the dataset
+dataset = dataset.train_test_split(test_size=0.2)
 
-    # Generic legal questions
-    questions.extend([
-        f"What is the case {title} about?",
-        f"Who were the parties involved in the case {title}?",
-        f"What was the main legal issue in {title}?",
-        f"What was the court's decision in {title}?",
-        f"What was the court's reasoning in {title}?",
-        f"What precedents were cited in {title}?",
-        f"What were the key arguments presented in {title}?",
-    ])
+# Save the dataset
+dataset.save_to_disk("dataset")
 
-    # Specific questions based on named entities
-    parties = set()
-    experts = set()
-    legal_terms = set()
+# Initialize SentenceTransformer for context embeddings
+embedding_model_name = "all-MiniLM-L6-v2"
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+embedding_model = SentenceTransformer(embedding_model_name, device=device)
 
-    for ent in doc.ents:
-        if ent.label_ == "PERSON":
-            parties.add(ent.text)
-            questions.append(f"What role did {ent.text} play in the case {title}?")
-        elif ent.label_ == "ORG":
-            parties.add(ent.text)
-            questions.append(f"What was {ent.text}'s involvement in the case {title}?")
+# Generate embeddings for the context
+def generate_context_embeddings(contexts, model):
+    return model.encode(contexts, show_progress_bar=True, convert_to_numpy=True)
 
-    # Identify potential experts and legal terms
-    expert_patterns = r"\b(expert|consultant|specialist)\b"
-    legal_term_patterns = r"\b(clause|agreement|contract|award|application|claim|allegation)\b"
+# Tokenize the dataset with context embeddings
+model_checkpoint = "distilbert-base-uncased-distilled-squad"
+tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
 
-    for sent in doc.sents:
-        sent_text = sent.text.lower()
-        if re.search(expert_patterns, sent_text):
-            for token in sent:
-                if token.pos_ == "PROPN" and token.text not in experts:
-                    experts.add(token.text)
-                    questions.append(f"What was {token.text}'s expert opinion in {title}?")
-        
-        legal_terms_found = re.findall(legal_term_patterns, sent_text)
-        for term in legal_terms_found:
-            if term not in legal_terms:
-                legal_terms.add(term)
-                questions.append(f"What does the {term} refer to in {title}?")
-
-    # Questions about parties
-    if parties:
-        questions.append(f"What were the main arguments of {' and '.join(list(parties)[:2])} in {title}?")
-
-    # Questions about specific legal aspects
-    questions.extend([
-        f"What evidence was presented in {title}?",
-        f"Were there any dissenting opinions in {title}?",
-        f"What remedies were sought in {title}?",
-        f"What was the procedural history of {title}?",
-        f"Were there any jurisdictional issues in {title}?",
-    ])
-
-    return list(set(questions))  # Remove any duplicates
-
-
-def extract_answers(text, question):
-    doc = nlp(text)
+def preprocess_function(examples):
+    questions = [q.strip() for q in examples["question"]]
+    contexts = [c.strip() for c in examples["context"]]
     
-    if question.startswith("Who"):
-        return [ent.text for ent in doc.ents if ent.label_ == "PERSON"]
-    elif question.startswith("What"):
-        if "is" in question:
-            return [chunk.text for chunk in doc.noun_chunks if chunk.text in question]
+    # Generate embeddings for the contexts
+    context_embeddings = generate_context_embeddings(contexts, embedding_model)
+    
+    inputs = tokenizer(
+        questions,
+        contexts,
+        max_length=384,
+        truncation="only_second",
+        return_offsets_mapping=True,
+        padding="max_length",
+    )
+
+    offset_mapping = inputs.pop("offset_mapping")
+    answers = examples["answer"]
+    start_positions = []
+    end_positions = []
+
+    for i, offset in enumerate(offset_mapping):
+        answer = answers[i]
+        start_char = contexts[i].find(answer)
+        end_char = start_char + len(answer)
+        sequence_ids = inputs.sequence_ids(i)
+
+        # Find the start and end of the context
+        idx = 0
+        while sequence_ids[idx] != 1:
+            idx += 1
+        context_start = idx
+        while sequence_ids[idx] == 1:
+            idx += 1
+        context_end = idx - 1
+
+        # If the answer is not fully inside the context, label is (0, 0)
+        if offset[context_start][0] > end_char or offset[context_end][1] < start_char:
+            start_positions.append(0)
+            end_positions.append(0)
         else:
-            return [sent.text for sent in doc.sents if any(token.pos_ == "VERB" for token in sent)]
-    elif question.startswith("When"):
-        return [ent.text for ent in doc.ents if ent.label_ in ["DATE", "TIME"]]
-    elif question.startswith("Where"):
-        return [ent.text for ent in doc.ents if ent.label_ in ["GPE", "LOC"]]
-    elif question.startswith("Why"):
-        return [sent.text for sent in doc.sents if any(token.text.lower() in ["because", "since", "as"] for token in sent)]
-    elif question.startswith("How"):
-        return [sent.text for sent in doc.sents if any(token.pos_ in ["VERB", "ADJ"] for token in sent)]
-    
-    return []
+            # Otherwise it's the start and end token positions
+            idx = context_start
+            while idx <= context_end and offset[idx][0] <= start_char:
+                idx += 1
+            start_positions.append(idx - 1)
 
-# def create_qa_pairs(max_questions_per_chunk=5):
-#     qa_pairs = []
-#     for chunk in chunks:
-#         print(type(chunk), chunk)
-#         text = chunk['Text']
-#         title = chunk['metadata']['Title']
-#         questions = generate_questions(text, title)
-        
-#         # Randomly sample questions if there are more than max_questions_per_chunk
-#         if len(questions) > max_questions_per_chunk:
-#             questions = random.sample(questions, max_questions_per_chunk)
-        
-#         for question in questions:
-#             # answers = extract_answers(text, question)
-#             if answers:
-#                 qa_pairs.append({
-#                     "context": text,
-#                     "question": question,
-#                     # "answer": answers[0],  # Take the first answer for simplicity
-#                     "title": title
-#                 })
-#     return qa_pairs
+            idx = context_end
+            while idx >= context_start and offset[idx][1] >= end_char:
+                idx -= 1
+            end_positions.append(idx + 1)
 
-# qa_pairs = create_qa_pairs()
-# print(f"Generated {len(qa_pairs)} QA pairs.")
-# print(qa_pairs[:5])
+    inputs["start_positions"] = start_positions
+    inputs["end_positions"] = end_positions
+    inputs["context_embeddings"] = context_embeddings.tolist()  # Add context embeddings to the inputs
+    return inputs
+
+tokenized_dataset = dataset.map(preprocess_function, batched=True, remove_columns=dataset["train"].column_names)
+
+# Save the tokenized dataset
+tokenized_dataset.save_to_disk("tokenized_dataset")
