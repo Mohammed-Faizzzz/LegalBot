@@ -1,86 +1,258 @@
 import json
 
 qa_pairs = [
+
     {
-        "question": "What was the primary issue in the case between CIX and DGN?",
-        "answer": "The primary issue was whether the Market Benchmarks used to determine the Final Valuation of the company should be based on Phoenix’s reports or the report of the Seller’s expert, Falcon.",
-        "context": ['[TITLE: [2024] SGHC 133] as determined by the tribunal. He maintained that instead of using the median benchmarks from the Phoenix reports as the Market Benchmarks (as the tribunal had decided to do, in the First Partial Award), the Final Valuation should have been determined in the way suggested by the Seller’s expert Falcon. The difference was in the \nmillions of dollars.', '[TITLE: [2024] SGHC 133] as a result of the matters complained about. In essence, he says Phoenix failed to provide proper and complete reports, but there is no evidence what those proper and complete reports by Phoenix would have been, and more specifically what the Market Benchmarks derived from those reports would have been. Instead, \nthe Seller engaged an expert (Falcon) to provide a report commenting on \nPhoenix’s reports, using some of Phoenix’s data, rejecting some of Phoenix’s \ndata, and adding some other data.', '[TITLE: [2024] SGHC 133] reports by Phoenix would have been, and more specifically what the Market Benchmarks derived from those reports would have been. Instead, the Seller engaged an expert (Falcon) to provide a report commenting on Phoenix’s reports, using some of Phoenix’s data, rejecting some of Phoenix’s data, and adding some other data. Falcon was given different instructions from \nPhoenix, and the two experts had different approaches to regression.', '[TITLE: [2024] SGHC 133] reports would have been. Instead, the Seller engaged an expert (Falcon) to provide a report commenting on Phoenix’s reports, using some of Phoenix’s data, rejecting some of Phoenix’s data, and adding some other data. Falcon was given different instructions from Phoenix, and the two experts had different approaches to regression. Simply \nput, the benchmarks put forward by Falcon (which the Tribunal rejected) do not \nrepresent the Market Benchmarks that would have been derived from Phoenix’s \nreports, if those had been made “proper and complete” in the manner alleged by \nthe Seller.', '[TITLE: [2024] SGHC 133] However, the Seller has failed to prove what damage he has suffered as a result: he has failed to prove that Falcon would have been appointed instead; and he has failed to prove what the Market Benchmarks would have been if Falcon, or another HC consultant, had been appointed instead. 112\nThe remaining two components of damage claimed by the Seller are for \n(a) costs of his legal experts and human resources expert (ie, Falcon) engaged \nto assist with the determination of the Market Benchmark for the Key \nManagement Roles under Phoenix’s reports; and (b) $6,000 plus GST as his \nhalf-share of the cost of Phoenix’s reports.']
+        "question": "What are the conditions under which a writ of summons can be extended in civil procedure?",
+        "answer": "A writ of summons can be extended if the plaintiff can demonstrate a substantial connection to the jurisdiction, has made diligent efforts to serve the writ, and has prosecuted the claims with due expedition.",
+        "context": ""
     },
     {
-        "question": "What did the First Partial Award decide regarding the Market Benchmarks?",
-        "answer": "The First Partial Award decided that the P50 / median benchmarks from Phoenix’s reports should be used as the Market Benchmarks in determining the Final Valuation of the Company.",
-        "context": ['[TITLE: [2024] SGHC 133] as determined by the tribunal. He maintained that instead of using the median benchmarks from the Phoenix reports as the Market Benchmarks (as the tribunal had decided to do, in the First Partial Award), the Final Valuation should have been determined in the way suggested by the Seller’s expert Falcon. The difference was in the \nmillions of dollars.', '[TITLE: [2024] SGHC 133] 3 to resolve this dispute over the Market Benchmarks (and consequently the Final Valuation), and other disputes between them. The arbitral tribunal comprised Professor Tan Cheng Han, SC as sole arbitrator. (Pursuant to sealing and redaction orders in view of arbitration confidentiality, this judgment anonymises party names and identifying details.) Phoenix’s expert reports\n8\nIn its expert reports, Phoenix did not give a single figure as the “Market \nBenchmark” for each of the KMRs; instead, Phoenix provided a range of \npossible benchmarks for the relevant KMRs.5 From the range of compensation \nlevels for each KMR, Phoenix set out P25 (25th percentile), P50 (50th percentile, \nie, median), and P75 (75th percentile) benchmarks.', '[TITLE: [2024] SGHC 133] give a single figure as the “Market Benchmark” for each of the KMRs; instead, Phoenix provided a range of possible benchmarks for the relevant KMRs.5 From the range of compensation levels for each KMR, Phoenix set out P25 (25th percentile), P50 (50th percentile, ie, median), and P75 (75th percentile) benchmarks. 9\nThe Buyer’s position was that the most appropriate of the benchmark \nvalues put forward by Phoenix should be chosen ‒ the Buyer’s expert suggested \nthat P50 would be the appropriate Market Benchmark.6\n10\nThis contrasted with the approach taken by the Seller’s expert, “Falcon”.', '[TITLE: [2024] SGHC 133] 133 11 28 The tribunal then made a Third Partial Award on 28 July 2023,32 in which he determined the Final Valuation of the Company, based on the findings in the First and Second Partial Awards. 29 The Seller was dissatisfied with the Final Valuation as determined by the tribunal. He maintained that instead of using the median benchmarks from \nthe Phoenix reports as the Market Benchmarks (as the tribunal had decided to \ndo, in the First Partial Award), the Final Valuation should have been determined \nin the way suggested by the Seller’s expert Falcon.', '[TITLE: [2024] SGHC 133] as a result of the matters complained about. In essence, he says Phoenix failed to provide proper and complete reports, but there is no evidence what those proper and complete reports by Phoenix would have been, and more specifically what the Market Benchmarks derived from those reports would have been. Instead, \nthe Seller engaged an expert (Falcon) to provide a report commenting on \nPhoenix’s reports, using some of Phoenix’s data, rejecting some of Phoenix’s \ndata, and adding some other data.']
+        "question": "What is the impact of a failure to obtain an order for service outside of Singapore on the validity of a writ of summons?",
+        "answer": "The failure to obtain an order for service outside of Singapore can result in the expiration of the writ of summons if it is not served within the prescribed time, leading to the dismissal of the application for extension​.",
+        "context": ""
     },
     {
-        "question": "Who was appointed as the independent human resource consultant in the SPA?",
-        "answer": "Phoenix was appointed as the independent human resource consultant.",
-        "context": "[2024] SGHC 133"
+        "question": "How does the court view the connection between the plaintiff’s claims and the jurisdiction in deciding on an application for an extension of the writ?",
+        "answer": "The court evaluates the substantial connection between the plaintiff's claims and the jurisdiction. A lack of significant connection or relevance to the jurisdiction can result in the denial of the extension application​.",
+        "context": ""
     },
     {
-        "question": "What were the Seller’s allegations against Phoenix in the present suit?",
-        "answer": "The Seller alleged that Phoenix had misrepresented matters relating to its appointment and that due to Phoenix’s negligence, its reports were flawed.",
-        "context": ['[TITLE: [2024] SGHC 133] other projects between the Buyer and Phoenix. The documents obtained in the course of the suit flesh out details of the projects, but this is not something that “entirely changes the aspect of the case”. 53 Plaintiff’s Closing Submissions dated 1 March 2024 (“PCS”) at [41]. 54 PCS at [38]. Version No 1: 24 May 2024 (12:06 hrs)\nCIX v DGN\n[2024] SGHC 133\n33\n89\nSimilarly, the Seller says that in the suit Phoenix admitted to deficiencies \nin its reports,55 but in the arbitration the Seller already alleged that there were \ndeficiencies in its reports, and if the Seller had wanted to elicit evidence about \nthat from Phoenix, the Seller could and should have called Phoenix to give \nevidence.', '[TITLE: [2024] SGHC 133] material that was put before the tribunal ([62]–[70]). Third, and to the extent that new material is sought to be relied on now, the belated reliance on new material is unmeritorious ([71]–[89]). Fourth, allowing the present suit could cause the Buyer to be “twice vexed in the same matter” ([90]–[91]). The present suit is a collateral attack against prior decisions \n49\nFirst, the suit is a collateral attack against prior decisions on the use of \nbenchmarks from Phoenix’s reports as the Market Benchmarks to determine the \nFinal Valuation of the Company.', '[TITLE: [2024] SGHC 133] Phoenix’s deliverables), which the Seller had refused to particularise on the basis that was not relying on any breach of contract by Phoenix. Ironically, the Seller’s submission on this is still lacking in particulars: he does not say what specific contractual provisions Phoenix allegedly breached, or how they were breached. But the point remains that the \n84 \nPCS at [93]–[102]. 85 \nPCS at [98].', '[TITLE: [2024] SGHC 133] But what really puts it all conclusively beyond doubt is that [Phoenix’s] own position when they wrote to my firm this year…[reference was then made to Phoenix’s 20 August 2019 email]. So they are actually saying they don’t owe any duty to [the Seller], the agreement is with [the Buyer]. So we feel \nthat puts it beyond doubt.37\n(d)\nIn the Seller’s Post-Hearing Submissions in the arbitration, the \nSeller referred to Phoenix’s 20 August 2019 email as part of his \nsubmission that “there are good reasons to doubt the independence of \n[Phoenix]”, and that the Buyer was not aware of Phoenix’s lack of \nindependence until later 2019 when (among other things) Phoenix sent \nits 20 August 2019 email.38\n66\nOn the alleged flaws in Phoenix’s reports, in the arbitration the Seller \ncomplained about the same matters that he is suing Phoenix for in this suit:\n36 \nDefendant’s Bundle of Documents Volume 1 dated 12 January 2024 (“1-DB”) at p \n275, [34(d)].', '[TITLE: [2024] SGHC 133] negligently flawed reports relate to reports that Phoenix had sent to the Buyer in draft; the Buyer did not require Phoenix to revise the draft reports to correct the supposed flaws, but proceeded to rely on Phoenix’s reports in the arbitration as being contractually final and binding on the parties. Indeed, the Buyer \n55 \nPCS at [38].']
+        "question": "What role does the plaintiff’s diligence in prosecuting their claims play in the court's decision to extend the validity of a writ of summons?",
+        "answer": "The plaintiff's diligence in prosecuting their claims is crucial; failure to show consistent and timely efforts to advance the case can lead to the refusal of the writ extension​.",
+        "context": ""
     },
     {
-        "question": "What was the outcome of the Seller's application to set aside the First Partial Award?",
-        "answer": "The Seller's application to set aside the First Partial Award was dismissed, and the Seller’s appeal against that decision was also dismissed.",
-        "context": ['[TITLE: [2024] SGHC 146] that while the defendant succeeded in its appeal against the decision that it lacked locus standi, the Court of Appeal found that even if the defendant had locus standi, it would not have succeeded on the merits in its appeal against the Assistant Registrar’s decision to grant the discovery order. It was on this basis that parties \nwere ordered to bear their own costs. Hence, the costs order in Xing Rong does \nnot assist the Defendant.', '[TITLE: [2024] SGHC 133] Partial Award and applied to set aside parts of it, including the aspects concerning the Final Valuation. That setting-aside application was dismissed on 5 March 2021 (CIX v CIY [2021] SGHC 53), and the Seller’s appeal against that by Civil Appeal 4 of 2021 was dismissed on 21 October 2021. The Seller’s failed Corruption Application\n16\nAfter his setting-aside application was dismissed (but his appeal against \nthat was still pending), the Seller sought to undermine Phoenix’s reports and the \nFirst Partial Award, in a different way.', '[TITLE: [2024] SGHC 146] that the Claimants have the right to be heard, their submissions are not an unnecessary protraction of the proceedings. 11 The Defendant also relies on Xing Rong at [34] where the Court of Appeal ordered parties to bear their own costs, to submit that parties should bear their own costs. However, it is clear from the decision in Xing Rong, that while \nthe defendant succeeded in its appeal against the decision that it lacked locus \nstandi, the Court of Appeal found that even if the defendant had locus standi, it \nwould not have succeeded on the merits in its appeal against the Assistant \nRegistrar’s decision to grant the discovery order.', '[TITLE: [2024] SGHC 133] Laing had sued his solicitors in negligence about the drafting of certain agreements. Mr Laing’s case depended on him proving that the agreements were in the terms alleged by him, but in earlier proceedings between him and the other party to the agreement, the court had decided to the contrary. The English Court of Appeal held that it was an \nabuse of process to seek to relitigate that decision in the further proceedings Mr \nLaing brought against his solicitors.', '[TITLE: [2024] SGHC 133] Mr Richards, and Zurich on the basis that the brokers were Zurich’s agents. 43 The court struck out, as an abuse of process, all of A&A’s claims other than its claim against Towergate for negligence on the basis that it was not properly advised as to the effect of CP2. A&A had raised claims in the suit on \nthe basis that the policy did not contain CP2, after having lost in the arbitration \nagainst Zurich with the arbitrator finding that the policy did contain CP2, which \nA&A had not satisfied.']
+        "question": "What is the significance of the passage of time in the court’s decision regarding the extension of a writ of summons?",
+        "answer": "The passage of time is significant; prolonged periods without progress or service of the writ can negatively impact the court’s decision, emphasizing the need for timely and proactive litigation efforts.",
+        "context": ""
     },
     {
-        "question": "What was the husband's application in HC/SUM 235/2024 about?",
-        "answer": "The husband's application was to rescind the maintenance order that required him to pay $1,200 monthly to his ex-wife.",
-        "context": ['[TITLE: [2024] SGHC 139] his CPF savings and the sale of his company’s shares to live on. Their household expenses are about $7,000 per month. On this basis, he seeks to rescind the maintenance order as the circumstances have changed, and he is no longer able to maintain the Wife at $1,200 per month. The Husband is, \nhowever, willing to provide $600 a month for the next two years.', '[TITLE: [2024] SGHC 139] says that she is hoping to return to work, perhaps as a pre-school teacher or Chinese tutor, to provide for the household. Otherwise, they have only about $500,000 from his CPF savings and the sale of his company’s shares to live on. Their household expenses are about $7,000 per month. On this basis, he seeks \nto rescind the maintenance order as the circumstances have changed, and he is \nno longer able to maintain the Wife at $1,200 per month.', '[TITLE: [2024] SGHC 139] was ordered to pay maintenance of $1,200 to the plaintiff Wife. HC/SUM 235/2024 is his application to rescind that maintenance order. 2 The Husband, aged 65, retired in July 2023. He remarried in 2017 and has a daughter from that marriage. The Wife, aged 69, has been unemployed since 2017. She was diagnosed with a slipped disc in 2010, and was unable to \nwork because she could not stand for long. They have two children from their \nmarriage. The son, aged 33, lives in the United States of America.', '[TITLE: [2024] SGHC 139] expenses are about $7,000 per month. On this basis, he seeks to rescind the maintenance order as the circumstances have changed, and he is no longer able to maintain the Wife at $1,200 per month. The Husband is, however, willing to provide $600 a month for the next two years. Version No 1: 30 May 2024 (10:22 hrs)\nDIL v DIM\n[2024] SGHC 139\n3\n6\nThe Wife says that the Husband’s retirement is self-induced, and in any \nevent, it does not amount to a material change in circumstances.', '[TITLE: [2024] SGHC 139] 4 Both the children benefitted from an education fund created by the parties in the divorce. The education fund totalled $600,000 and was intended for the children’s overseas tertiary education. The son has also received further financial aid from the parties, as he was not doing well in the USA. In 2022, the \nHusband transferred USD $20,000 to the son, and the Wife transferred \n$13,729.77 to him as recently as October 2023. 5\nThe Husband’s daughter from his second marriage is six years old.']
+        "question": "What are the key considerations for varying a maintenance order due to retirement and changed financial circumstances?",
+        "answer": "Key considerations include the retiree's reduced income, the impact on their ability to meet existing maintenance obligations, and the financial needs of both the retiree and the recipient spouse.",
+        "context": ""
     },
     {
-        "question": "Why did the husband seek to rescind the maintenance order?",
-        "answer": "The husband sought to rescind the maintenance order due to his retirement and changed financial circumstances, claiming he could no longer afford the maintenance.",
-        "context": ['[TITLE: [2024] SGHC 139] was ordered to pay maintenance of $1,200 to the plaintiff Wife. HC/SUM 235/2024 is his application to rescind that maintenance order. 2 The Husband, aged 65, retired in July 2023. He remarried in 2017 and has a daughter from that marriage. The Wife, aged 69, has been unemployed since 2017. She was diagnosed with a slipped disc in 2010, and was unable to \nwork because she could not stand for long. They have two children from their \nmarriage. The son, aged 33, lives in the United States of America.', '[TITLE: [2024] SGHC 139] his CPF savings and the sale of his company’s shares to live on. Their household expenses are about $7,000 per month. On this basis, he seeks to rescind the maintenance order as the circumstances have changed, and he is no longer able to maintain the Wife at $1,200 per month. The Husband is, \nhowever, willing to provide $600 a month for the next two years.', '[TITLE: [2024] SGHC 139] says that she is hoping to return to work, perhaps as a pre-school teacher or Chinese tutor, to provide for the household. Otherwise, they have only about $500,000 from his CPF savings and the sale of his company’s shares to live on. Their household expenses are about $7,000 per month. On this basis, he seeks \nto rescind the maintenance order as the circumstances have changed, and he is \nno longer able to maintain the Wife at $1,200 per month.', '[TITLE: [2024] SGHC 139] until she moved out to a shared apartment with her colleague in March 2022. She was in intermittent contact with the parties after that, but they have not heard from her since May 2023. 4 Both the children benefitted from an education fund created by the parties in the divorce. The education fund totalled $600,000 and was intended \nfor the children’s overseas tertiary education. The son has also received further \nfinancial aid from the parties, as he was not doing well in the USA.', '[TITLE: [2024] SGHC 139] 4 Both the children benefitted from an education fund created by the parties in the divorce. The education fund totalled $600,000 and was intended for the children’s overseas tertiary education. The son has also received further financial aid from the parties, as he was not doing well in the USA. In 2022, the \nHusband transferred USD $20,000 to the son, and the Wife transferred \n$13,729.77 to him as recently as October 2023. 5\nThe Husband’s daughter from his second marriage is six years old.']
+        "question": "How does the court assess the financial circumstances of the paying spouse in maintenance variation applications?",
+        "answer": "The court assesses the overall financial situation, including income, savings, assets, and liabilities, to determine whether the paying spouse's circumstances have materially changed to justify a variation.",
+        "context": ""
     },
     {
-        "question": "What was the court's decision regarding the husband's application to rescind the maintenance order?",
-        "answer": "The court decided to vary the maintenance to $600 per month for a reduced period of two years, starting from June 2024.",
-        "context": "[2024] SGHC 139"
+        "question": "What role do the adult children’s financial contributions play in maintenance order variations involving elderly parties?",
+        "answer": "The financial contributions of adult children are considered, particularly if they have benefitted from parental support previously. The court may factor in the expectation of reciprocal support in its decision​.",
+        "context": ""
     },
     {
-        "question": "What were the financial circumstances of the husband and his second family?",
-        "answer": "The husband had retired, had a six-year-old daughter from his second marriage, and his second wife was unemployed. They had about $500,000 in savings and monthly household expenses of around $7,000.",
-        "context": ['[TITLE: [2024] SGHC 139] 2023. 5 The Husband’s daughter from his second marriage is six years old. The second wife is a Chinese citizen, aged 38. She is unemployed, but the Husband says that she is hoping to return to work, perhaps as a pre-school teacher or Chinese tutor, to provide for the household. Otherwise, they have only about \n$500,000 from his CPF savings and the sale of his company’s shares to live on. Their household expenses are about $7,000 per month.', '[TITLE: [2024] SGHC 139] received further financial aid from the parties, as he was not doing well in the USA. In 2022, the Husband transferred USD $20,000 to the son, and the Wife transferred $13,729.77 to him as recently as October 2023. 5 The Husband’s daughter from his second marriage is six years old. The \nsecond wife is a Chinese citizen, aged 38. She is unemployed, but the Husband \nsays that she is hoping to return to work, perhaps as a pre-school teacher or \nChinese tutor, to provide for the household.', '[TITLE: [2024] SGHC 139] says that she is hoping to return to work, perhaps as a pre-school teacher or Chinese tutor, to provide for the household. Otherwise, they have only about $500,000 from his CPF savings and the sale of his company’s shares to live on. Their household expenses are about $7,000 per month. On this basis, he seeks \nto rescind the maintenance order as the circumstances have changed, and he is \nno longer able to maintain the Wife at $1,200 per month.', '[TITLE: [2024] SGHC 139] was ordered to pay maintenance of $1,200 to the plaintiff Wife. HC/SUM 235/2024 is his application to rescind that maintenance order. 2 The Husband, aged 65, retired in July 2023. He remarried in 2017 and has a daughter from that marriage. The Wife, aged 69, has been unemployed since 2017. She was diagnosed with a slipped disc in 2010, and was unable to \nwork because she could not stand for long. They have two children from their \nmarriage. The son, aged 33, lives in the United States of America.', '[TITLE: [2024] SGHC 139] 4 Both the children benefitted from an education fund created by the parties in the divorce. The education fund totalled $600,000 and was intended for the children’s overseas tertiary education. The son has also received further financial aid from the parties, as he was not doing well in the USA. In 2022, the \nHusband transferred USD $20,000 to the son, and the Wife transferred \n$13,729.77 to him as recently as October 2023. 5\nThe Husband’s daughter from his second marriage is six years old.']
+        "question": "What is the court's approach to the employability of elderly parties in maintenance variation cases?",
+        "answer": "The court acknowledges the limited employability of elderly parties due to age and health conditions, which may prevent them from becoming financially self-sufficient, thus affecting maintenance decisions.",
+        "context": ""
     },
     {
-        "question": "What did the wife argue in response to the husband's application?",
-        "answer": "The wife claimed that the husband's retirement was self-induced and that he had sufficient savings to continue paying the maintenance. She also noted that he had substantial savings in his CPF and bank accounts and held valuable company shares.",
-        "context": ['[TITLE: [2024] SGHC 139] any event, it does not amount to a material change in circumstances. She claims that he has substantial savings in his CPF and bank accounts, and that he holds company shares that are of substantial value. Thus, she says that he has sufficient funds to continue to provide monthly maintenance. 7\nAt the hearing on 29 April 2024, I directed parties to file further \naffidavits on their present incomes and savings, given that both parties were able \nto send a substantial sum of money to their son in 2022 and late 2023 \nrespectively.', '[TITLE: [2024] SGHC 139] willing to provide $600 a month for the next two years. Version No 1: 30 May 2024 (10:22 hrs) DIL v DIM [2024] SGHC 139 3 6 The Wife says that the Husband’s retirement is self-induced, and in any event, it does not amount to a material change in circumstances. She claims that \nhe has substantial savings in his CPF and bank accounts, and that he holds \ncompany shares that are of substantial value. Thus, she says that he has \nsufficient funds to continue to provide monthly maintenance.', '[TITLE: [2024] SGHC 139] position to seek new work, whether on account of age or infirmity. 9 Although the Husband has disclosed his CPF and bank account savings to be of a greater sum than the Wife’s, I am satisfied that these monies are also essential to providing for his new family and daughter. It is inexplicable that the \ntwo adult children seem to have vanished at a time when they are needed most.', '[TITLE: [2024] SGHC 139] I am satisfied that the Husband is no longer able to maintain the Wife and his present family. From full employment to no employment is clearly a change of circumstances when the husband is no longer in a position to seek new work, whether on account of age or infirmity. 9\nAlthough the Husband has disclosed his CPF and bank account savings \nto be of a greater sum than the Wife’s, I am satisfied that these monies are also \nessential to providing for his new family and daughter.', '[TITLE: [2024] SGHC 139] says that she is hoping to return to work, perhaps as a pre-school teacher or Chinese tutor, to provide for the household. Otherwise, they have only about $500,000 from his CPF savings and the sale of his company’s shares to live on. Their household expenses are about $7,000 per month. On this basis, he seeks \nto rescind the maintenance order as the circumstances have changed, and he is \nno longer able to maintain the Wife at $1,200 per month.']
+        "question": "How does the court determine the appropriate amount and duration of varied maintenance payments?",
+        "answer": "The court considers the financial needs of the recipient, the paying spouse's ability to pay, and the overall fairness of the arrangement, often setting a reduced amount for a specified period.",
+        "context": ""
     },
     {
-        "question": "What was the main subject of the applications in SUM 1924/2023 and SUM 1925/2023?",
-        "answer": "SUM 1924/2023 was for leave to serve the Writ of Summons and other documents on all Singapore Defendants with single addresses and those with foreign addresses. SUM 1925/2023 was for leave to extend the validity of the Writ and to file amended Writ of Summons and Statement of Claim.",
-        "context": "[2024] SGHC 142"
+        "question": "What is the legal standard for proving negligence by a director in a company?",
+        "answer": "The legal standard for proving negligence by a director requires demonstrating that the director failed to exercise due care and diligence in managing the company’s affairs, resulting in financial harm or loss.",
+        "context": ""
     },
     {
-        "question": "What were the plaintiff's claims in the Statement of Claim filed on 11 August 2010?",
-        "answer": "The plaintiff sought damages for harm to his reputation and business, damages suffered by his clients and relatives, and quashing orders of resolutions passed by various Taiwanese bar associations and legal entities.",
-        "context": "[2024] SGHC 142"
+        "question": "How does the court evaluate claims of breach of fiduciary duty against a director?",
+        "answer": "The court evaluates such claims by examining whether the director acted in good faith, in the best interests of the company, and avoided conflicts of interest while performing their duties.",
+        "context": ""
     },
     {
-        "question": "What was the court's decision on the applications in SUM 1924 and SUM 1925?",
-        "answer": "The court dismissed both applications, stating that the plaintiff's case had no substantial connection with Singapore and that the plaintiff had failed to prosecute his claims with due expedition.",
-        "context": "[2024] SGHC 142"
+        "question": "What factors are considered in determining the liability of a nominee director?",
+        "answer": "Factors include the extent of the nominee director's involvement in the company's management, adherence to statutory obligations, and any evidence of active decision-making or negligence.",
+        "context": ""
     },
     {
-        "question": "What were the procedural issues faced by the plaintiff in this case?",
-        "answer": "The plaintiff faced issues with serving the Writ outside Singapore, obtaining orders for service on various defendants, and providing security for costs.",
-        "context": "[2024] SGHC 142"
+        "question": "How does the court handle claims for accounting fees and additional interest paid by a director on behalf of the company?",
+        "answer": "The court reviews the evidence of services rendered and expenses incurred, determining if they were necessary and reasonable, and if the director should be reimbursed accordingly.",
+        "context": ""
     },
     {
-        "question": "What was the plaintiff seeking in terms of damages?",
-        "answer": "The plaintiff sought damages in excess of US$1 trillion, plus special, exemplary, and aggravated damages of not less than US$10 billion.",
-        "context": ['[TITLE: [2024] SGHC 136] to each claimant (comprising $150,000 in general damages and $50,000 in aggravated damages). On balance, it is appropriate that the quantum of damages awarded in the each of the OCs exceeds the $133,000 awarded in LHL v LSH but is slightly lower than the $210,000 awarded in LHL v XYC. Conclusion\n90\nFor all the reasons above, I award $200,000 in general and aggravated \ndamages ($150,000 being general damages and $50,000 being aggravated \ndamages) to each of the claimants in OC 496 and OC 497, respectively.', '[TITLE: [2024] SGHC 136] in contrast to LHL v XYC, I also consider that the extent of publication and republication in the present case is not as great as in that case. I therefore award $200,000 in general and aggravated damages to each claimant (comprising $150,000 in general damages and $50,000 in aggravated damages). On balance, it is appropriate that the quantum \nof damages awarded in the each of the OCs exceeds the $133,000 awarded in \nLHL v LSH but is slightly lower than the $210,000 awarded in LHL v XYC.', '[TITLE: [2024] SGHC 138] Claimants have failed to adduce before the court, any evidence that substantiates their allegations or suggest that Ms Zhu was in breach of her fiduciary or statutory duties as a director. I therefore dismiss this claim. Counterclaim Outstanding fees of $2660 53 Ms Zhu counterclaims for two set of sums. First, for the sum of $2,660, \nwhich is alleged to be the fees for accounting services rendered to Pioneer.', '[TITLE: [2024] SGHC 142] there is a bare allegation that those defendants have assets in Singapore. 15 In terms of quantum, the plaintiff is seeking damages in excess of US$1 trillion,4 plus special, exemplary and aggravated damages of not less than US$10bn.5 4 Statement of Claim filed 11 August 2010 (“SOC”) at para 1(4)(e)(i). 5  \nSOC at para 140.', '[TITLE: [2024] SGHC 142] engaged in various conspiracies against him. It is notable that, aside from the fact that the first to sixth defendants are Singaporean entities, the remaining defendants and events do not appear to have any connection with Singapore, although there is a bare allegation that those defendants have assets in Singapore. 15 \nIn terms of quantum, the plaintiff is seeking damages in excess of \nUS$1 trillion,4 plus special, exemplary and aggravated damages of not less than \nUS$10bn.5 \n \n4  \nStatement of Claim filed 11 August 2010 (“SOC”) at para 1(4)(e)(i).']
+        "question": "What is the impact of the director's resignation on their legal responsibilities and liabilities?",
+        "answer": "A director's resignation does not absolve them of liabilities incurred during their tenure. They remain accountable for actions taken while they were in office, including compliance with fiduciary duties.",
+        "context": ""
     },
     {
-        "question": "What was the nature of the application in Originating Application No 258 of 2024?",
-        "answer": "The application was made under Sections 3, 4(1), and 4(2) of the Evidence (Civil Proceedings in Other Jurisdictions) Act 1979 (2020 Rev Ed).",
-        "context": "[2024] SGHC 143"
-    }
+        "question": "What are the legal principles governing the breach of fiduciary duties by a company director?",
+        "answer": "Legal principles include acting in the company’s best interests, avoiding conflicts of interest, exercising care and diligence, and being transparent and accountable in managing company affairs​.",
+        "context": ""
+    },
+    {
+        "question": "How does the court determine the adequacy of financial statements produced by a director?",
+        "answer": "The court assesses whether the financial statements are complete, accurate, and prepared in accordance with statutory requirements and generally accepted accounting principles.",
+        "context": ""
+    },
+    {
+        "question": "What are the consequences of a director failing to account for company funds and transactions?",
+        "answer": "Consequences can include legal action for recovery of funds, personal liability for losses, potential disqualification from holding directorships, and damage to professional reputation​.",
+        "context": ""
+    },
+    {
+        "question": "How does the court address counterclaims for unpaid fees and additional interest on loans by directors?",
+        "answer": "The court examines the validity and justification of the counterclaims, considering evidence of the services provided and expenses incurred, to determine if reimbursement is warranted​.",
+        "context": ""
+    },
+    {
+        "question": "What factors influence the court's decision on awarding costs in disputes involving director’s fiduciary duties?",
+        "answer": "Factors include the complexity of the case, the conduct of the parties, the reasonableness of their claims and defenses, and the overall fairness in apportioning legal costs​.",
+        "context": ""
+    },
+    {
+        "question": "What are the key considerations for varying or rescinding a maintenance order when the paying spouse retires and claims changed financial circumstances, particularly in cases involving elderly parties?",
+        "answer": "Key considerations include the retiree's reduced income, the financial needs of both parties, any health conditions affecting employability, and the overall fairness of the maintenance arrangement.",
+        "context": ""
+    },
+    {
+        "question": "How does the court assess whether retirement constitutes a material change in circumstances for maintenance variation?",
+        "answer": "The court evaluates whether the retirement was voluntary or due to age/health, the impact on the retiree's income, and whether the change significantly affects the ability to meet maintenance obligations.",
+        "context": ""
+    },
+    {
+        "question": "What role do adult children’s financial contributions play in maintenance decisions involving elderly parents?",
+        "answer": "The court may consider the adult children's financial ability and history of receiving parental support, and the expectation of their contribution towards the elderly parents' upkeep​.",
+        "context": ""
+    },
+    {
+        "question": "What is the court’s approach to determining the appropriate amount of varied maintenance payments?",
+        "answer": "The court balances the paying spouse's ability to pay with the recipient's financial needs, often reducing the amount while ensuring the recipient's basic needs are met​.",
+        "context": ""
+    },
+    {
+        "question": "How does the court handle disputes over substantial savings and assets in maintenance variation cases?",
+        "answer": "The court examines the liquidity and necessity of the savings and assets for the paying spouse's future needs, and whether they should be considered in the maintenance calculation​.",
+        "context": ""
+    },
+    {
+        "question": "What constitutes a breach of contract under the terms of indemnity in commercial agreements?",
+        "answer": "A breach of contract under the terms of indemnity in commercial agreements occurs when the indemnifying party fails to fulfill their obligation to indemnify the indemnitee for losses or damages as stipulated in the indemnity clause of the contract.",
+        "context": ""
+    },
+    {
+        "question": "How does the court determine if a contract is a sham or fraudulent transaction?",
+        "answer": "The court examines the intent of the parties and the nature of the transactions. A contract is considered a sham if the parties intended to create an appearance of rights and obligations that do not reflect their true agreement, and fraudulent if it involves deceit to secure an unfair advantage.",
+        "context": ""
+    },
+    {
+        "question": "What are the implications of failing to mitigate damages in a contract dispute?",
+        "answer": "If a party fails to mitigate damages, the court may reduce the amount of damages awarded. The non-breaching party has a duty to take reasonable steps to minimize their losses, and failure to do so can limit their recovery.",
+        "context": ""
+    },
+    {
+        "question": "What factors does the court consider when evaluating the authenticity and validity of documents in a letter of credit transaction?",
+        "answer": "The court considers the literal and purposive interpretations of representations and warranties in the letter of credit, including the existence, authenticity, and validity of signed bills of lading and other required documents.",
+        "context": ""
+    },
+    {
+        "question": "When does an issuing bank have a cause of action in negligent misrepresentation against a beneficiary in a letter of credit transaction?",
+        "answer": "An issuing bank may have a cause of action if the beneficiary makes a negligent misrepresentation in documents presented under the letter of credit, causing the bank to incur losses by relying on the inaccurate information.",
+        "context": ""
+    },
+    {
+        "question": "What is the significance of locus standi in applications for production of documents by non-parties?",
+        "answer": "Locus standi, or the right to be heard, is crucial as it ensures that parties affected by the production of documents are given an opportunity to present their case, maintaining the principles of natural justice.",
+        "context": ""
+    },
+    {
+        "question": "How does the court assess costs in applications for production of documents in civil proceedings?",
+        "answer": "The court considers all relevant circumstances and typically awards costs to the successful party, recognizing their entitlement to recover costs incurred in defending or advancing their position.",
+        "context": ""
+    },
+    {
+        "question": "What are the procedural requirements for applying for discovery of documents from non-parties in Singapore?",
+        "answer": "Applications for discovery from non-parties must be made by summons, served personally on the non-party and every party to the proceedings, ensuring all stakeholders are informed and have the opportunity to respond.",
+        "context": ""
+    },
+    {
+        "question": "How does the principle of 'audi alteram partem' apply in civil procedure?",
+        "answer": "The principle of 'audi alteram partem' ensures that all parties affected by a legal action have the right to be heard. This principle is applied in civil procedure to guarantee fairness and transparency in judicial proceedings.",
+        "context": ""
+    },
+    {
+        "question": "Under what conditions can a court strike out a pleading as frivolous or vexatious?",
+        "answer": "A court can strike out a pleading if it is clear as a matter of law that the pleading is unsustainable, such as when a claim is time-barred or lacks a legal basis even if all alleged facts are proven true.",
+        "context": ""
+    },
+    {
+        "question": "What are the key factors in determining wrongful termination of a distributorship agreement?",
+        "answer": "Key factors include the specific terms of the agreement regarding notice periods for termination, the conduct of the parties, and whether proper notice was given as stipulated in the agreement.",
+        "context": ""
+    },
+    {
+        "question": "How does the court interpret ambiguous contractual terms in distributorship agreements?",
+        "answer": "The court considers the plain language of the contract, the intentions of the parties, and relevant extrinsic evidence to resolve ambiguities, applying principles such as contra proferentem if necessary.",
+        "context": ""
+    },
+    {
+        "question": "What is the role of extrinsic evidence in interpreting contract terms under Singapore law?",
+        "answer": "Extrinsic evidence can be used to clarify the context and intentions behind contract terms, provided it meets the requirements of relevance, availability at the time of contracting, and relation to a clear context.",
+        "context": ""
+    },
+    {
+        "question": "When is a term implied in a contract for business efficacy?",
+        "answer": "A term is implied if it is necessary for the business efficacy of the contract, meaning the contract would be unworkable or nonsensical without the implied term, and it is clear that both parties would have agreed to it at the time of contracting.",
+        "context": ""
+    },
+    {
+        "question": "What constitutes a valid incorporation of standard terms into a contract?",
+        "answer": "Standard terms are validly incorporated if they are explicitly referenced in the contract, made available to the other party, and agreed upon by both parties, typically demonstrated through clear and unambiguous contractual language.",
+        "context": ""
+    },
+    {
+        "question": "What are the statutory requirements for requesting further arguments in Singapore civil procedure?",
+        "answer": "Parties can request further arguments before the earlier of the extraction of the order or the 15th day after the decision, as stipulated in section 29B(2) of the Supreme Court of Judicature Act, ensuring timely requests for reconsideration.",
+        "context": ""
+    },
+    {
+        "question": "How does the court handle requests for further arguments after an order has been extracted?",
+        "answer": "Generally, the court does not entertain further arguments once an order has been extracted, adhering to procedural finality unless specific statutory provisions allow for such considerations.",
+        "context": ""
+    },
+    {
+        "question": "What are the limitations of the court’s jurisdiction to hear further arguments on a perfected order?",
+        "answer": "The court's jurisdiction is limited by the timing of the request relative to the extraction of the order and the specific statutory framework governing such requests, emphasizing the need for timely procedural compliance.",
+        "context": ""
+    },
+    {
+        "question": "What legal principles guide the court in determining whether to hear further arguments?",
+        "answer": "The court considers whether the judge is prepared to change their mind or alter their thinking on the issues decided, ensuring that further arguments are substantive and not merely repetitive.",
+        "context": ""
+    },
+    {
+        "question": "Under what circumstances can a court’s discretion to hear further arguments be exercised?",
+        "answer": "The court’s discretion can be exercised when the request for further arguments is made within the permissible timeframe and when the arguments presented could potentially alter the court’s initial decision.",
+        "context": ""
+    },
+    {
+        "question": "What are the factors considered in quantifying loss of future earnings in personal injury cases?",
+        "answer": "Factors include the plaintiff’s age, occupation, potential career trajectory, severity of the injury, and its impact on the ability to work, taking into account actuarial tables and relevant case precedents.",
+        "context": ""
+    },
+    {
+        "question": "How does the court determine the appropriate retirement age for calculating future earnings loss?",
+        "answer": "The court considers statutory retirement ages, government policies, and specific circumstances of the plaintiff’s employment and career prospects, often using actuarial tables as a reference.",
+        "context": ""
+    },
+    {
+        "question": "What is the role of medical evidence in assessing loss of future earnings?",
+        "answer": "Medical evidence is critical in establishing the extent and permanence of the plaintiff’s injuries, their impact on employability, and the likelihood of future employment, guiding the quantification of damages.",
+        "context": ""
+    },
+    {
+        "question": "How does the court approach the use of actuarial tables in personal injury claims?",
+        "answer": "Actuarial tables provide a standardized method for calculating future losses, but the court may depart from these tables if the specific facts of the case and the ends of justice require a different approach.",
+        "context": ""
+    },
+    {
+        "question": "What are the implications of a finding that a plaintiff is unlikely to ever be employed again?",
+        "answer": "Such a finding significantly impacts the calculation of future earnings loss, potentially leading to higher damages awarded to compensate for the lifelong loss of income, based on the plaintiff’s expected working life but for the injury.",
+        "context": ""
+    },
+
 ]
 
 # Save to a JSON file
