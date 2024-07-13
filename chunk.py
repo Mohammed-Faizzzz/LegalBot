@@ -1,12 +1,36 @@
 import nltk
-nltk.download('punkt')
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import sent_tokenize, word_tokenize
+
 from extraction import extract_data
 import pickle
 import os
-from preprocess import generate_legal_questions
 import random
 import csv
+import re
+
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+def preprocess_text(text):
+    text = text.lower()
+    text = re.sub(r'[^\w\s]', '', text)
+    words = text.split()
+    stop_words = set(stopwords.words('english'))
+    words = [word for word in words if word not in stop_words]
+    lemmatizer = WordNetLemmatizer()
+    words = [lemmatizer.lemmatize(word) for word in words]
+
+    # print(words)
+    
+    return ' '.join(words)
+
+# Apply preprocessing
+chunk = "Your text chunk here."
+cleaned_chunk = preprocess_text(chunk)
+
 
 def split_into_chunks(text, title, max_length=512, overlap=50):
     """
@@ -58,14 +82,18 @@ all_chunks = []
 all_qns = []
 
 for pdf in pdf_files:
-    print(f"Processing: {pdf}")
+    # print(f"Processing: {pdf}")
     data = extract_data(pdf)
     title = data["Title"]
     text = data["Text"]
 
+    # Preprocess the text
+    # cleaned_text = preprocess_text(text)
+
     # Split the text into chunks and store them
     chunks = split_into_chunks(text, title)
     all_chunks.extend(chunks)
+    print(all_chunks[:5])
 
 with open('all_chunks.pkl', 'wb') as f:
     pickle.dump(all_chunks, f)

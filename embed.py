@@ -1,5 +1,5 @@
 import torch
-from transformers import AutoTokenizer, AutoModel
+from sentence_transformers import SentenceTransformer
 import numpy as np
 from extraction import extract_data
 from chunk import split_into_chunks
@@ -7,26 +7,25 @@ import pickle
 
 chunks = pickle.load(open('all_chunks.pkl', 'rb'))
 
-model_name = "distilbert-base-uncased"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModel.from_pretrained(model_name)
+# Use a SentenceTransformer model
+model_name = "all-MiniLM-L6-v2"
+
+# Check for GPU or CPU availability
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+model = SentenceTransformer(model_name, device=device)
 
 def generate_embeddings(chunks):
     """
-    Generates embeddings for a list of text chunks.
+    Generates embeddings for a list of text chunks using SentenceTransformer.
 
     Args:
         chunks (list): A list of text chunks.
 
     Returns:
-        list: A list of embeddings generated for each text chunk.
+        numpy.ndarray: An array of embeddings generated for each text chunk.
     """
-    embeddings = []
-    for chunk in chunks:
-        inputs = tokenizer(chunk, return_tensors='pt', max_length=512, truncation=True, padding=True)
-        outputs = model(**inputs)
-        embedding = outputs.last_hidden_state.mean(dim=1).detach().numpy()
-        embeddings.append(embedding)
+    embeddings = model.encode(chunks, show_progress_bar=True, convert_to_numpy=True)
     return embeddings
 
 embeddings = generate_embeddings(chunks)
