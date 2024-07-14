@@ -15,6 +15,7 @@ def extract_data(pdf_path):
 
     """
     doc = fitz.open(pdf_path)
+    num_pages = doc.page_count
     text = ""
     first_page = doc[0]
 
@@ -37,19 +38,14 @@ def extract_data(pdf_path):
     category = first_page_text[judgment_start + pad: version_start]
 
     # Extract Parties Involved
-    pattern = re.compile(r'\b[A-Za-z]+(?:\s[A-Za-z]+)*\s+v\s+[A-Za-z]+(?:\s[A-Za-z]+)*\b')
+    last_page = doc.load_page(num_pages - 1)  # Page indexing starts from 0
+    first_line = last_page.get_text("text").splitlines()[0]  # Extract the first line of text
     
-    # Find all matches in the text
-    matches = pattern.findall(text)
-    
-    print(matches)
+    title = first_line + " " + title
+    print(title)
 
     data = {
         "Title": title,
         "Text": text
     }
     return data
-
-# Example usage
-pdf_path = "./../pdfs/[2024] SGHC 131.pdf"
-data = extract_data(pdf_path)
