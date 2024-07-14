@@ -37,9 +37,19 @@ def extract_data(pdf_path):
     category = first_page_text[judgment_start + pad: version_start]
 
     # Extract Parties Involved
+    pattern = re.compile(r'\b[A-Za-z]+(?:\s[A-Za-z]+)*\s+v\s+[A-Za-z]+(?:\s[A-Za-z]+)*\b')
+    
+    # Find all matches in the text
+    matches = pattern.findall(text)
+    
+    print(matches)
 
     data = {
         "Title": title,
         "Text": text
     }
     return data
+
+# Example usage
+pdf_path = "./../pdfs/[2024] SGHC 131.pdf"
+data = extract_data(pdf_path)
