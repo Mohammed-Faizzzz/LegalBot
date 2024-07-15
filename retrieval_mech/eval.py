@@ -1,7 +1,7 @@
 from transformers import AutoModelForQuestionAnswering, AutoTokenizer
 from datasets import load_from_disk
 import torch
-from evaluate import load
+# from evaluate import load
 import numpy as np
 import collections
 import torch.nn.functional as F
