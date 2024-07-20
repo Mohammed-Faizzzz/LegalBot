@@ -49,6 +49,9 @@ def extract_data(pdf_path):
         second_instance_start = title_matches[1].start()
         text = text[second_instance_start:]
 
+        title_to_remove = title_matches[1].group(0)
+        text = re.sub(re.escape(title_to_remove) + r'\s*', '', text)
+
     data = {
         "Title": title,
         "Text": text
