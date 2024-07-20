@@ -30,7 +30,7 @@ def generate_question_embedding(question, model):
     question_embedding = model.encode([question], show_progress_bar=False)
     return question_embedding
 
-def retrieve_chunks(question, index, chunks, model, top_k=5):
+def retrieve_chunks(question, index, chunks, model, top_k=3):
     # Generate embedding for the question
     question_embedding = generate_question_embedding(question, model)
     
@@ -49,22 +49,26 @@ def retrieve_chunks(question, index, chunks, model, top_k=5):
     return res
 
 # Process each question-answer pair
+t5_format_data = []
 for pair in qa_pairs:
     question = pair['question']
+    answer = pair['answer']
     retrieved_chunks = retrieve_chunks(question, index, chunks, model)
-    pair['context'] = retrieved_chunks
+    
+    # Format for T5
+    input_text = f"question: {question} context: {retrieved_chunks}"
+    t5_format_data.append({
+        'input': input_text,
+        'target': answer
+    })
 
-# Save the updated qa_pairs into a CSV file
+# Save the T5 formatted data into a CSV file
 with open('dataset.csv', 'w', newline='', encoding='utf-8') as f:
-    writer = csv.DictWriter(f, fieldnames=['question', 'answer', 'context'])
+    writer = csv.DictWriter(f, fieldnames=['input', 'target'])
     writer.writeheader()
-    for pair in qa_pairs:
-        writer.writerow({
-            'question': pair['question'],
-            'answer': pair['answer'],
-            'context': pair['context']
-        })
+    for item in t5_format_data:
+        writer.writerow(item)
 
-# Save the updated qa_pairs into a JSON file
+# Save the T5 formatted data into a JSON file
 with open('dataset.json', 'w', encoding='utf-8') as f:
-    json.dump(qa_pairs, f, indent=4)
+    json.dump(t5_format_data, f, indent=4)

@@ -24,37 +24,20 @@ def preprocess_text(text):
 
 
 def split_into_chunks(text, title, max_length=512, overlap=50):
-    """
-    Splits the given text into chunks based on the maximum length and overlap.
-
-    Args:
-        text (str): The input text to be split into chunks.
-        title (str): The title of the text.
-        max_length (int, optional): The maximum length of each chunk. Defaults to 512.
-        overlap (int, optional): The number of words to overlap between chunks. Defaults to 50.
-
-    Returns:
-        list: A list of chunks, where each chunk is a string.
-    """
-    sentences = sent_tokenize(text)
+    words = word_tokenize(text)
     chunks = []
     chunk = []
-    chunk_length = 0
+    title_words = word_tokenize(f"[TITLE: {title}]")
+    title_length = len(title_words)
     
-    for sentence in sentences:
-        sentence_tokens = word_tokenize(sentence)
-        sentence_length = len(sentence_tokens)
-        
-        if chunk_length + sentence_length > max_length:
-            chunks.append(f"[TITLE: {title}] " + " ".join(chunk).strip())
-            chunk = chunk[-overlap:] + sentence_tokens
-            chunk_length = len(chunk)
-        else:
-            chunk.extend(sentence_tokens)
-            chunk_length += sentence_length
+    for i, word in enumerate(words):
+        if len(chunk) + 1 > max_length - title_length:
+            chunks.append(" ".join(title_words + chunk))
+            chunk = words[max(0, i-overlap):i]
+        chunk.append(word)
     
     if chunk:
-        chunks.append(f"[TITLE: {title}] " + " ".join(chunk).strip())
+        chunks.append(" ".join(title_words + chunk))
     
     return chunks
 
@@ -92,6 +75,9 @@ for pdf in pdf_files:
     # Split the text into chunks and store them
     chunks = split_into_chunks(text, title)
     all_chunks.extend(chunks)
+    # print(len(all_chunks))
+    # print length of longest chunk
+    # print("Max:", max([len(chunk) for chunk in chunks]))
     # print(all_chunks[:5])
 
 with open('all_chunks.pkl', 'wb') as f:
