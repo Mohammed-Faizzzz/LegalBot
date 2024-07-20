@@ -15,21 +15,12 @@ nltk.download('stopwords')
 nltk.download('wordnet')
 
 def preprocess_text(text):
+
     text = text.lower()
-    text = re.sub(r'[^\w\s]', '', text)
-    words = text.split()
-    stop_words = set(stopwords.words('english'))
-    words = [word for word in words if word not in stop_words]
-    lemmatizer = WordNetLemmatizer()
-    words = [lemmatizer.lemmatize(word) for word in words]
-
-    # print(words)
+    text = re.sub(r'^.*version no.*\n?', '', text, flags= re.MULTILINE)
     
-    return ' '.join(words)
-
-# Apply preprocessing
-chunk = "Your text chunk here."
-cleaned_chunk = preprocess_text(chunk)
+    res = "".join([char for char in text if char.isalnum() or char.isspace()])
+    return res
 
 
 def split_into_chunks(text, title, max_length=512, overlap=50):
@@ -67,7 +58,13 @@ def split_into_chunks(text, title, max_length=512, overlap=50):
     
     return chunks
 
-
+# # Example usage
+# pdf_path = "./../pdfs/[2024] SGHC 145.pdf"
+# data = extract_data(pdf_path)
+# title = data["Title"]
+# text = data["Text"]
+# text = preprocess_text(text)
+# chunks = split_into_chunks(text, title)
 
 """
 Iterate over all pdf files, extract their title and text, then chunk them. Store ALL chunks
@@ -81,6 +78,8 @@ all_chunks = []
 
 all_qns = []
 
+
+
 for pdf in pdf_files:
     # print(f"Processing: {pdf}")
     data = extract_data(pdf)
@@ -88,7 +87,7 @@ for pdf in pdf_files:
     text = data["Text"]
 
     # Preprocess the text
-    # cleaned_text = preprocess_text(text)
+    text = preprocess_text(text)
 
     # Split the text into chunks and store them
     chunks = split_into_chunks(text, title)
