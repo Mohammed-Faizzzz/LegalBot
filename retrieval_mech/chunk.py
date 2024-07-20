@@ -93,7 +93,7 @@ for pdf in pdf_files:
     # Split the text into chunks and store them
     chunks = split_into_chunks(text, title)
     all_chunks.extend(chunks)
-    print(all_chunks[:5])
+    # print(all_chunks[:5])
 
 with open('all_chunks.pkl', 'wb') as f:
     pickle.dump(all_chunks, f)
