@@ -5,6 +5,12 @@ import pickle
 import json
 import csv
 import torch
+import re
+
+def remove_title(text):
+    # Use regular expression to remove [TITLE: ... [YYYY] SGHC XXX]
+    cleaned_text = re.sub(r'\[TITLE:.*?\[.*?\] SGHC \d+.*?\]', '', text)
+    return cleaned_text
 
 # Initialize SentenceTransformer model
 model_name = "all-MiniLM-L6-v2"
@@ -29,11 +35,18 @@ def retrieve_chunks(question, index, chunks, model, top_k=5):
     question_embedding = generate_question_embedding(question, model)
     
     D, I = index.search(question_embedding, k=top_k)
-    print(I[0])
+    # print(I[0])
     
     # Retrieve the top chunks (i.e., best matches)
     retrieved_chunks = [chunks[idx] for idx in I[0]]
-    return retrieved_chunks
+
+    res = ""
+
+    for i in range(len(retrieved_chunks)):
+        curr = remove_title(retrieved_chunks[i])
+        res += curr + "\n"
+
+    return res
 
 # Process each question-answer pair
 for pair in qa_pairs:
