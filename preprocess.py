@@ -1,11 +1,14 @@
 import pandas as pd
 from datasets import Dataset
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, T5ForConditionalGeneration
 from sentence_transformers import SentenceTransformer
 import torch
 
 # Load your data
 df = pd.read_csv('dataset.csv')
+
+# select only the first 200 rows for demonstration
+df = df.head(200)
 
 # Convert to Hugging Face Dataset
 dataset = Dataset.from_pandas(df)
@@ -26,67 +29,48 @@ def generate_context_embeddings(contexts, model):
     return model.encode(contexts, show_progress_bar=True, convert_to_numpy=True)
 
 # Tokenize the dataset with context embeddings
-model_checkpoint = "distilbert-base-uncased-distilled-squad"
+model_checkpoint = "t5-base"
 tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
 
 def preprocess_function(examples):
-    questions = [q.strip() for q in examples["question"]]
-    contexts = [c.strip() for c in examples["context"]]
+    inputs = [inp.strip() for inp in examples["input"]]
+    targets = [t.strip() for t in examples["target"]]
+    
+    # Assuming the input format is already "question: ... context: ..."
+    # If not, you might need to modify this part
+    
+    # Extract contexts (everything after "context: ")
+    contexts = [inp.split("context: ", 1)[1] if "context: " in inp else "" for inp in inputs]
     
     # Generate embeddings for the contexts
     context_embeddings = generate_context_embeddings(contexts, embedding_model)
     
-    inputs = tokenizer(
-        questions,
-        contexts,
-        max_length=384,
-        truncation="only_second",
-        return_offsets_mapping=True,
+    model_inputs = tokenizer(
+        inputs,
+        max_length=512,
         padding="max_length",
+        truncation=True,
     )
+    
+    # Tokenize targets (answers)
+    with tokenizer.as_target_tokenizer():
+        labels = tokenizer(
+            targets,
+            max_length=128,
+            padding="max_length",
+            truncation=True,
+        )
 
-    offset_mapping = inputs.pop("offset_mapping")
-    answers = examples["answer"]
-    start_positions = []
-    end_positions = []
+    model_inputs["labels"] = labels["input_ids"]
+    model_inputs["context_embeddings"] = context_embeddings.tolist()  # Add context embeddings to the inputs
+    return model_inputs
 
-    for i, offset in enumerate(offset_mapping):
-        answer = answers[i]
-        start_char = contexts[i].find(answer)
-        end_char = start_char + len(answer)
-        sequence_ids = inputs.sequence_ids(i)
+# Apply the preprocessing function without removing columns
+tokenized_dataset = dataset.map(preprocess_function, batched=True)
 
-        # Find the start and end of the context
-        idx = 0
-        while sequence_ids[idx] != 1:
-            idx += 1
-        context_start = idx
-        while sequence_ids[idx] == 1:
-            idx += 1
-        context_end = idx - 1
-
-        # If the answer is not fully inside the context, label is (0, 0)
-        if offset[context_start][0] > end_char or offset[context_end][1] < start_char:
-            start_positions.append(0)
-            end_positions.append(0)
-        else:
-            # Otherwise it's the start and end token positions
-            idx = context_start
-            while idx <= context_end and offset[idx][0] <= start_char:
-                idx += 1
-            start_positions.append(idx - 1)
-
-            idx = context_end
-            while idx >= context_start and offset[idx][1] >= end_char:
-                idx -= 1
-            end_positions.append(idx + 1)
-
-    inputs["start_positions"] = start_positions
-    inputs["end_positions"] = end_positions
-    inputs["context_embeddings"] = context_embeddings.tolist()  # Add context embeddings to the inputs
-    return inputs
-
-tokenized_dataset = dataset.map(preprocess_function, batched=True, remove_columns=dataset["train"].column_names)
+# Now, remove the original columns
+columns_to_remove = dataset['train'].column_names
+tokenized_dataset = tokenized_dataset.remove_columns(columns_to_remove)
 
 # Save the tokenized dataset
-tokenized_dataset.save_to_disk("tokenized_dataset")
+tokenized_dataset.save_to_disk("tokenized_dataset_t5")

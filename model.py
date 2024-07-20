@@ -1,20 +1,18 @@
-from transformers import AutoModelForQuestionAnswering, TrainingArguments, Trainer, AutoTokenizer, EarlyStoppingCallback
+from transformers import AutoModelForSeq2SeqLM, TrainingArguments, Trainer, AutoTokenizer, EarlyStoppingCallback
 from datasets import load_from_disk
-from sentence_transformers import SentenceTransformer
 import torch
 
-# Load the SentenceTransformer model for embeddings
-embedding_model_name = "all-MiniLM-L6-v2"
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-embedding_model = SentenceTransformer(embedding_model_name, device=device)
+# ignore and do not display warnings
+import warnings
+warnings.filterwarnings("ignore")
 
 # Load the QA model for fine-tuning
-qa_model_checkpoint = "distilbert-base-uncased-distilled-squad"
-qa_model = AutoModelForQuestionAnswering.from_pretrained(qa_model_checkpoint)
+qa_model_checkpoint = "t5-base"
+qa_model = AutoModelForSeq2SeqLM.from_pretrained(qa_model_checkpoint)
 tokenizer = AutoTokenizer.from_pretrained(qa_model_checkpoint)
 
 # Load the tokenized dataset from disk
-tokenized_dataset = load_from_disk("tokenized_dataset")
+tokenized_dataset = load_from_disk("tokenized_dataset_t5")
 
 early_stopping_callback = EarlyStoppingCallback(early_stopping_patience=3)
 
@@ -29,12 +27,12 @@ training_args = TrainingArguments(
     num_train_epochs=10,
     weight_decay=0.1,
     warmup_steps=100,
-    gradient_accumulation_steps=4,
-    dataloader_num_workers=4,
-    dataloader_prefetch_factor=4,
     use_cpu=True,
+    gradient_accumulation_steps=4,
     load_best_model_at_end=True,
     metric_for_best_model="eval_loss",
+    dataloader_num_workers=4,  # Ensure num_workers is greater than 0 for multiprocessing
+    dataloader_prefetch_factor=2,
 )
 
 # Initialize the Trainer
