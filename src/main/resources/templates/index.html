@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>LegalBot Service</title>
+</head>
+<body>
+    <h1>LegalBot Service</h1>
+    <form method="post" action="/query">
+        <label for="question">Enter your question:</label><br>
+        <input type="text" id="question" name="question" required><br><br>
+        <input type="submit" value="Submit">
+    </form>
+    <div th:if="${question}">
+        <h2>Question:</h2>
+        <p th:text="${question}"></p>
+        <h2>Answer:</h2>
+        <p th:text="${answer}"></p>
+    </div>
+</body>
+</html>
