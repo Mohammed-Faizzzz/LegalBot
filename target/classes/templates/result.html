@@ -2,12 +2,62 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Answer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .question, .answer {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .question h2, .answer h2 {
+            color: #3498db;
+            margin-top: 0;
+        }
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        a:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
-    <h1>Question:</h1>
-    <p th:text="${question}"></p>
-    <h1>Answer:</h1>
-    <p th:text="${answer}"></p>
+    <h1>Legal Query Result</h1>
+    <div class="question">
+        <h2>Question:</h2>
+        <p th:text="${question}"></p>
+    </div>
+    <div class="answer">
+        <h2>Answer:</h2>
+        <p th:text="${answer}"></p>
+    </div>
     <a href="/">Ask another question</a>
+        <script>
+        document.getElementById('askAnother').addEventListener('click', function(e) {
+            sessionStorage.setItem('showLoading', 'false');
+        });
+    </script>
 </body>
 </html>

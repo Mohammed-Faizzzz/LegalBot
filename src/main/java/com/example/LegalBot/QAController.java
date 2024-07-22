@@ -24,12 +24,21 @@ public class QAController {
     @PostMapping("/ask")
     public String ask(@RequestParam String question, Model model) {
         logger.info("Received question: " + question);
-        String answer = getPythonScriptAnswer(question);
-        logger.info("Generated answer: " + answer);
+        String fullAnswer = getPythonScriptAnswer(question);
+        String cleanedAnswer = cleanAnswer(fullAnswer);
+        logger.info("Generated answer: " + cleanedAnswer);
         model.addAttribute("question", question);
-        model.addAttribute("answer", answer);
+        model.addAttribute("answer", cleanedAnswer);
         return "result";
     }
+
+private String cleanAnswer(String fullAnswer) {
+    int answerStart = fullAnswer.indexOf("Answer:");
+    if (answerStart != -1) {
+        return fullAnswer.substring(answerStart).trim();
+    }
+    return "No answer found.";
+}
 
     private String getPythonScriptAnswer(String question) {
         try {
