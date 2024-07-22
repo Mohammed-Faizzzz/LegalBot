@@ -42,7 +42,15 @@ def extract_data(pdf_path):
     first_line = last_page.get_text("text").splitlines()[0]  # Extract the first line of text
     
     title = first_line + " " + title
-    print(title)
+
+    # Find the second instance of the title match and remove anything before it
+    title_matches = list(title_pattern.finditer(text))
+    if len(title_matches) >= 2:
+        second_instance_start = title_matches[1].start()
+        text = text[second_instance_start:]
+
+        title_to_remove = title_matches[1].group(0)
+        text = re.sub(re.escape(title_to_remove) + r'\s*', '', text)
 
     data = {
         "Title": title,

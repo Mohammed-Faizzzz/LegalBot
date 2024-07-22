@@ -11,4 +11,8 @@ qa_dataset.json
 dataset.json
 dataset.csv
 legal_qa_dataset.json
+/logs
+/formatted_dataset
+/tokenized_dataset_t5
+
 /legalbot-env
