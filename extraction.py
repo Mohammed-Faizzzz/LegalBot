@@ -10,8 +10,8 @@ def extract_data(pdf_path):
 
     Returns:
         dict: A dictionary containing the extracted data. The dictionary has two keys:
-            - "Title": The title of the document, extracted from the PDF text.
-            - "Text": The full text content of the PDF.
+            - "Title": The title of the document and parties involved, extracted from the PDF text.
+            - "Text": The full text content of the PDF. The text is also cleaned for repeated titles.
 
     """
     doc = fitz.open(pdf_path)
@@ -57,3 +57,25 @@ def extract_data(pdf_path):
         "Text": text
     }
     return data
+
+def remove_title(text):
+    # Use regular expression to remove [TITLE: ... [YYYY] SGHC XXX]
+    cleaned_text = re.sub(r'\[TITLE:.*?\[.*?\] SGHC \d+.*?\]', '', text)
+    return cleaned_text
+
+def preprocess_text(text):
+    """
+    Preprocesses the given text by converting it to lowercase, removing any lines containing "version no",
+    and removing any non-alphanumeric characters except spaces.
+
+    Args:
+        text (str): The text to be preprocessed.
+
+    Returns:
+        str: The preprocessed text.
+    """
+    text = text.lower()
+    text = re.sub(r'^.*version no.*\n?', '', text, flags=re.MULTILINE)
+    
+    res = "".join([char for char in text if char.isalnum() or char.isspace()])
+    return res
