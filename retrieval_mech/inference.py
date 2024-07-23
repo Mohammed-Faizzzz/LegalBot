@@ -1,9 +1,11 @@
 import numpy as np
 import faiss
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 from sentence_transformers import SentenceTransformer
 import pickle
 import torch
+import torch.nn.functional as F
+from retrieval import retrieve_chunks
 
 # Load the FAISS index and embeddings
 index = faiss.read_index("legal_cases.index")
@@ -13,35 +15,48 @@ with open('all_chunks.pkl', 'rb') as f:
 
 # Load QA model and tokenizer
 model_path = "./my_qa_model"
-qa_model = AutoModelForSeq2SeqLM.from_pretrained(model_path)
+model = AutoModelForSeq2SeqLM.from_pretrained(model_path)
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-# Create QA pipeline
-qa_pipeline = pipeline("text2text-generation", model=qa_model, tokenizer=tokenizer)
+model.to(device)
 
 # Load embedding model
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2', device=device)
 
-# Modify retrieve_chunks function to use the embedding model
-def retrieve_chunks(question, index, chunks, embedding_model, k=5):
-    question_embedding = embedding_model.encode([question], show_progress_bar=False)
-    _, I = index.search(question_embedding, k)
-    return [chunks[i] for i in I[0]]
-
-# Using the query, retrieve relevant chunks and format into input for the QA model
-def answer_question(question):
-    retrieved_chunks = retrieve_chunks(question, index, chunks, embedding_model)
-    context = " ".join(retrieved_chunks)
+def answer_question(question, confidence_threshold=0.1):
+    # Retrieve relevant chunks
+    context = retrieve_chunks(question, index, chunks, embedding_model)
+    
+    # Prepare input
     input_text = f"question: {question} context: {context}"
-    
-    # Use the pipeline for generation
-    output = qa_pipeline(input_text, max_length=64, num_return_sequences=1)
-    
-    # The output is a list of dictionaries, we take the first one
-    predicted_answer = output[0]['generated_text']
-    return predicted_answer
+    inputs = tokenizer(input_text, return_tensors="pt", max_length=512, truncation=True, padding="max_length")
+    inputs = {k: v.to(device) for k, v in inputs.items()}
+
+    # Generate answer
+    model.eval()
+    with torch.no_grad():
+        outputs = model.generate(**inputs, max_length=64, num_return_sequences=1, output_scores=True, return_dict_in_generate=True)
+
+    # Decode the generated answer
+    predicted_answer = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
+    if predicted_answer == "":
+        predicted_answer = "Unable to find an answer"
+
+    # Calculate confidence score
+    scores = torch.stack(outputs.scores, dim=1)
+    log_probs = F.log_softmax(scores, dim=-1)
+    token_log_probs = torch.gather(log_probs, -1, outputs.sequences[:, 1:].unsqueeze(-1)).squeeze(-1)
+    sequence_log_prob = token_log_probs.sum(dim=-1)
+    confidence = torch.exp(sequence_log_prob / outputs.sequences.shape[1]).item()
+
+    # Return the result
+    result = {
+        'predicted_answer': predicted_answer if confidence > confidence_threshold else "Unable to find an answer",
+        'confidence': confidence,
+    }
+
+    return result
 
 def main():
     print("Enter your query (type 'exit' to quit):")
@@ -51,9 +66,11 @@ def main():
             break
         
         # Get the answer from the QA model
-        answer = answer_question(user_query)
+        result = answer_question(user_query)
         
-        print(f"Answer: {answer}\n")
+        print(f"Answer: {result['predicted_answer']}")
+        print(f"Confidence: {result['confidence']:.4f}")
+        print()
 
 if __name__ == "__main__":
     main()
