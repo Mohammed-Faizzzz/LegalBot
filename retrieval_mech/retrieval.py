@@ -3,13 +3,13 @@ import numpy as np
 import pickle
 import json
 import csv
-import torch
+import google.generativeai as genai
+import os
 from extraction import remove_title
 
-# Load the SentenceTransformer model
-model_name = "all-MiniLM-L6-v2"
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = SentenceTransformer(model_name, device=device)
+# Load environment variables and configure Gemini API
+API_KEY = os.getenv('API_KEY')
+genai.configure(api_key=API_KEY)
 
 # Load the embeddings, index, chunks, and QA pairs
 embeddings = np.load('embeddings.npy')
@@ -17,12 +17,13 @@ index = faiss.read_index('legal_cases.index')
 with open('all_chunks.pkl', 'rb') as f:
     chunks = pickle.load(f)
 
-def generate_question_embedding(question, model):
-    question_embedding = model.encode([question], show_progress_bar=False)
-    return question_embedding
+def generate_question_embedding(question):
+    model = genai.GenerativeModel('gemini-pro')
+    question_embedding = model.embed_content(question)
+    return np.array(question_embedding).reshape(1, -1)
 
-def retrieve_chunks(question, index, chunks, model, top_k=3):
-    question_embedding = generate_question_embedding(question, model)
+def retrieve_chunks(question, index, chunks, top_k=3):
+    question_embedding = generate_question_embedding(question)
     D, I = index.search(question_embedding, k=top_k)
     retrieved_chunks = [chunks[idx] for idx in I[0]]
 
@@ -39,7 +40,7 @@ def process_qa_pairs(qa_pairs):
     for pair in qa_pairs:
         question = pair['question']
         answer = pair['answer']
-        retrieved_chunks = retrieve_chunks(question, index, chunks, model)
+        retrieved_chunks = retrieve_chunks(question, index, chunks)
 
         # Format for T5
         input_text = f"question: {question} context: {retrieved_chunks}"
@@ -54,7 +55,3 @@ def process_qa_pairs(qa_pairs):
         writer.writeheader()
         for item in t5_format_data:
             writer.writerow(item)
-
-    # # Save the T5 formatted data into a JSON file
-    # with open('dataset.json', 'w', encoding='utf-8') as f:
-    #     json.dump(t5_format_data, f, indent=4)
