@@ -3,7 +3,7 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import sent_tokenize, word_tokenize
 
-from extraction import extract_data
+from extraction import extract_data, preprocess_text
 import pickle
 import os
 import random
@@ -14,16 +14,20 @@ nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
-def preprocess_text(text):
-
-    text = text.lower()
-    text = re.sub(r'^.*version no.*\n?', '', text, flags= re.MULTILINE)
-    
-    res = "".join([char for char in text if char.isalnum() or char.isspace()])
-    return res
-
-
 def split_into_chunks(text, title, max_length=512, overlap=50):
+    """
+    Splits the given text into chunks with a specified maximum length and overlap.
+
+    Args:
+        text (str): The input text to be split into chunks.
+        title (str): The title of the text.
+        max_length (int, optional): The maximum length of each chunk. Defaults to 512.
+        overlap (int, optional): The number of overlapping words between adjacent chunks. Defaults to 50.
+
+    Returns:
+        list: A list of chunks, where each chunk is a string.
+
+    """
     words = word_tokenize(text)
     chunks = []
     chunk = []
@@ -41,44 +45,31 @@ def split_into_chunks(text, title, max_length=512, overlap=50):
     
     return chunks
 
-# # Example usage
-# pdf_path = "./../pdfs/[2024] SGHC 145.pdf"
-# data = extract_data(pdf_path)
-# title = data["Title"]
-# text = data["Text"]
-# text = preprocess_text(text)
-# chunks = split_into_chunks(text, title)
+def chunk_text(pdf_paths):
+    """
+    Chunk the text from multiple PDF files into smaller chunks.
 
-"""
-Iterate over all pdf files, extract their title and text, then chunk them. Store ALL chunks
-in a single pickle file.
+    Args:
+        pdf_paths (list): A list of file paths to the PDF files.
 
-"""
-pdf_dir = './../pdfs'
-pdf_files = [os.path.join(pdf_dir, file) for file in os.listdir(pdf_dir) if file.endswith('.pdf')]
+    Returns:
+        list: A list of chunks containing the extracted text from the PDF files.
+    """
+    all_chunks = []
+    for pdf in pdf_paths:
+        data = extract_data(pdf)
+        title = data["Title"]
+        text = data["Text"]
 
-all_chunks = []
+        # Preprocess the text
+        text = preprocess_text(text)
 
-all_qns = []
+        # Split the text into chunks and store them
+        chunks = split_into_chunks(text, title)
+        all_chunks.extend(chunks)
+    
+    with open('all_chunks.pkl', 'wb') as f:
+        pickle.dump(all_chunks, f)
+    
+    return all_chunks
 
-
-
-for pdf in pdf_files:
-    # print(f"Processing: {pdf}")
-    data = extract_data(pdf)
-    title = data["Title"]
-    text = data["Text"]
-
-    # Preprocess the text
-    text = preprocess_text(text)
-
-    # Split the text into chunks and store them
-    chunks = split_into_chunks(text, title)
-    all_chunks.extend(chunks)
-    # print(len(all_chunks))
-    # print length of longest chunk
-    # print("Max:", max([len(chunk) for chunk in chunks]))
-    # print(all_chunks[:5])
-
-with open('all_chunks.pkl', 'wb') as f:
-    pickle.dump(all_chunks, f)

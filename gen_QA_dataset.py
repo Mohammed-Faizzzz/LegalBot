@@ -1,4 +1,5 @@
 import json
+from retrieval import process_qa_pairs
 
 qa_pairs = [
     {
@@ -5105,10 +5106,5 @@ qa_pairs = [
 
   ]
 
-print(len(qa_pairs))
+process_qa_pairs(qa_pairs)
 
-# Save to a JSON file
-with open("legal_qa_dataset.json", "w") as f:
-    json.dump(qa_pairs, f, indent=4)
-
-print("QA dataset has been saved to legal_qa_dataset.json")
