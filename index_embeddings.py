@@ -1,12 +1,31 @@
 import numpy as np
 import faiss
-from sentence_transformers import SentenceTransformer
-import torch
+import google.generativeai as genai
+import os
 import pickle
+from tqdm import tqdm
+
+# Load environment variables and configure Gemini API
+API_KEY = os.getenv('API_KEY')
+genai.configure(api_key=API_KEY)
+
+def get_gemini_embedding(text):
+    """
+    Generates an embedding for a single text chunk using Gemini API.
+
+    Args:
+        text (str): A text chunk.
+
+    Returns:
+        numpy.ndarray: The embedding generated for the text chunk.
+    """
+    model = genai.GenerativeModel('gemini-pro')
+    embedding = model.embed_content(text)
+    return np.array(embedding)
 
 def generate_embeddings(chunks):
     """
-    Generates embeddings for a list of text chunks using SentenceTransformer.
+    Generates embeddings for a list of text chunks using Gemini API.
 
     Args:
         chunks (list): A list of text chunks.
@@ -14,12 +33,11 @@ def generate_embeddings(chunks):
     Returns:
         numpy.ndarray: An array of embeddings generated for each text chunk.
     """
-    model_name = "all-MiniLM-L6-v2"
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = SentenceTransformer(model_name, device=device)
-    
-    embeddings = model.encode(chunks, show_progress_bar=True, convert_to_numpy=True)
-    return embeddings
+    embeddings = []
+    for chunk in tqdm(chunks, desc="Generating embeddings"):
+        embedding = get_gemini_embedding(chunk)
+        embeddings.append(embedding)
+    return np.array(embeddings)
 
 def index_embeddings():
     """
@@ -41,7 +59,7 @@ def index_embeddings():
     faiss.write_index(index, 'legal_cases.index')
     print(f"Indexed {index.ntotal} vectors of dimension {d}")
 
-# Assuming chunks are already loaded and preprocessed elsewhere in your code
+# Main execution
 chunks = pickle.load(open('all_chunks.pkl', 'rb'))
 embeddings = generate_embeddings(chunks)
 np.save('embeddings.npy', embeddings)
