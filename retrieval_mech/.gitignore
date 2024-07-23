@@ -14,3 +14,4 @@ legal_qa_dataset.json
 /logs
 /formatted_dataset
 /tokenized_dataset_t5
+.env
