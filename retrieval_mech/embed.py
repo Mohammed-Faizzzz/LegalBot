@@ -1,31 +1,8 @@
 import numpy as np
-import pickle
+from chunk import chunk_text
 import os
-import google.generativeai as genai
-from tqdm import tqdm
 
-# Load environment variables and configure Gemini API
-API_KEY = os.getenv('API_KEY')
-genai.configure(api_key=API_KEY)
-
-# Load chunks
-chunks = pickle.load(open('all_chunks.pkl', 'rb'))
-
-def get_gemini_embedding(text):
-    """
-    Generates an embedding for a single text chunk using Gemini API.
-
-    Args:
-        text (str): A text chunk.
-
-    Returns:
-        numpy.ndarray: The embedding generated for the text chunk.
-    """
-    model = genai.GenerativeModel('gemini-pro')
-    embedding = model.embed_content(text)
-    return np.array(embedding)
-
-def generate_embeddings(chunks):
+def generate_embeddings():
     """
     Generates embeddings for a list of text chunks using Gemini API.
 
@@ -35,14 +12,15 @@ def generate_embeddings(chunks):
     Returns:
         numpy.ndarray: An array of embeddings generated for each text chunk.
     """
-    embeddings = []
-    for chunk in tqdm(chunks, desc="Generating embeddings"):
-        embedding = get_gemini_embedding(chunk)
-        embeddings.append(embedding)
-    return np.array(embeddings)
+    pdf_dir = './../pdfs'
+    pdf_files = [os.path.join(pdf_dir, file) for file in os.listdir(pdf_dir) if file.endswith('.pdf')]
+    chunks = chunk_text(pdf_files)
 
-# Generate embeddings
-embeddings = generate_embeddings(chunks)
+    model_name = "all-MiniLM-L6-v2"
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model = SentenceTransformer(model_name, device=device)
 
-# Save embeddings
-np.save('embeddings.npy', embeddings)
+    embeddings = model.encode(chunks, show_progress_bar=True, convert_to_numpy=True)
+    embeddings = np.vstack(embeddings)  # Shape: (num_chunks, embedding_dim)
+    np.save('embeddings.npy', embeddings)
+    return embeddings
