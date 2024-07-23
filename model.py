@@ -12,7 +12,7 @@ qa_model = AutoModelForSeq2SeqLM.from_pretrained(qa_model_checkpoint)
 tokenizer = AutoTokenizer.from_pretrained(qa_model_checkpoint)
 
 # Load the tokenized dataset from disk
-tokenized_dataset = load_from_disk("tokenized_dataset_t5")
+tokenized_dataset = load_from_disk("tokenized_dataset")
 
 early_stopping_callback = EarlyStoppingCallback(early_stopping_patience=3)
 
