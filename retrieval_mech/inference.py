@@ -1,11 +1,19 @@
 import numpy as np
 import faiss
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
-from sentence_transformers import SentenceTransformer
 import pickle
 import torch
 import torch.nn.functional as F
-from retrieval import retrieve_chunks
+import google.generativeai as genai
+import os
+from dotenv import load_dotenv
+
+# Load environment variables and configure Gemini API
+load_dotenv()
+API_KEY = os.getenv('API_KEY')
+if API_KEY is None:
+    raise ValueError("API_KEY environment variable is not set")
+genai.configure(api_key=API_KEY)
 
 # Load the FAISS index and embeddings
 index = faiss.read_index("legal_cases.index")
@@ -21,12 +29,26 @@ tokenizer = AutoTokenizer.from_pretrained(model_path)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model.to(device)
 
-# Load embedding model
-embedding_model = SentenceTransformer('all-MiniLM-L6-v2', device=device)
+def generate_question_embedding(question):
+    model = "models/text-embedding-004"
+    result = genai.embed_content(
+        model=model,
+        content=question,
+        task_type="retrieval_document",
+        title="Embedding of question"
+    )
+    embedding = result['embedding']
+    return np.array(embedding).reshape(1, -1)
+
+def retrieve_chunks(question, index, chunks, top_k=3):
+    question_embedding = generate_question_embedding(question)
+    D, I = index.search(question_embedding, k=top_k)
+    retrieved_chunks = [chunks[idx] for idx in I[0]]
+    return " ".join(retrieved_chunks)
 
 def answer_question(question, confidence_threshold=0.1):
     # Retrieve relevant chunks
-    context = retrieve_chunks(question, index, chunks, embedding_model)
+    context = retrieve_chunks(question, index, chunks)
     
     # Prepare input
     input_text = f"question: {question} context: {context}"
