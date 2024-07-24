@@ -5,10 +5,14 @@ import json
 import csv
 import google.generativeai as genai
 import os
+from dotenv import load_dotenv
 from extraction import remove_title
 
 # Load environment variables and configure Gemini API
+load_dotenv()
 API_KEY = os.getenv('API_KEY')
+if API_KEY is None:
+    raise ValueError("API_KEY environment variable is not set")
 genai.configure(api_key=API_KEY)
 
 # Load the embeddings, index, chunks, and QA pairs
@@ -18,22 +22,21 @@ with open('all_chunks.pkl', 'rb') as f:
     chunks = pickle.load(f)
 
 def generate_question_embedding(question):
-    model = genai.GenerativeModel('gemini-pro')
-    question_embedding = model.embed_content(question)
-    return np.array(question_embedding).reshape(1, -1)
+    model = "models/text-embedding-004"
+    result = genai.embed_content(
+        model=model,
+        content=question,
+        task_type="retrieval_document",
+        title="Embedding of question"
+    )
+    embedding = result['embedding']
+    return np.array(embedding).reshape(1, -1)
 
 def retrieve_chunks(question, index, chunks, top_k=3):
     question_embedding = generate_question_embedding(question)
     D, I = index.search(question_embedding, k=top_k)
     retrieved_chunks = [chunks[idx] for idx in I[0]]
-
-    res = ""
-
-    for i in range(len(retrieved_chunks)):
-        curr = remove_title(retrieved_chunks[i])
-        res += curr + "\n"
-
-    return res
+    return " ".join(retrieved_chunks)
 
 def process_qa_pairs(qa_pairs):
     t5_format_data = []

@@ -4,9 +4,13 @@ import os
 import google.generativeai as genai
 from tqdm import tqdm
 import faiss
+from dotenv import load_dotenv
 
 # Load environment variables and configure Gemini API
+load_dotenv() 
 API_KEY = os.getenv('API_KEY')
+if API_KEY is None:
+    raise ValueError("API_KEY environment variable is not set")
 genai.configure(api_key=API_KEY)
 
 def get_gemini_embedding(text):
@@ -19,8 +23,14 @@ def get_gemini_embedding(text):
     Returns:
         numpy.ndarray: The embedding generated for the text chunk.
     """
-    model = genai.GenerativeModel('gemini-pro')
-    embedding = model.embed_content(text)
+    model = "models/text-embedding-004"
+    result = genai.embed_content(
+        model=model,
+        content=text,
+        task_type="retrieval_document",
+        title="Embedding of text chunk"
+    )
+    embedding = result['embedding']
     return np.array(embedding)
 
 def generate_embeddings():
@@ -62,6 +72,7 @@ def index_embeddings():
     # Save the index
     faiss.write_index(index, 'legal_cases.index')
     print(f"Indexed {index.ntotal} vectors of dimension {d}")
+
 
 generate_embeddings()
 index_embeddings()

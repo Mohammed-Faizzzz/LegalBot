@@ -41,4 +41,4 @@ tokenized_dataset = dataset.map(preprocess_function, batched=True)
 columns_to_remove = dataset['train'].column_names
 tokenized_dataset = tokenized_dataset.remove_columns(columns_to_remove)
 
-tokenized_dataset.save_to_disk("tokenized_dataset_t5")
+tokenized_dataset.save_to_disk("tokenized_dataset")
