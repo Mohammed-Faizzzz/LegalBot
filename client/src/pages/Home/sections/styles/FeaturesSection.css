@@ -1,0 +1,77 @@
+#features {
+  padding: 20px;
+  text-align: center;
+  background-color: #f8f8f8; 
+}
+
+#features h1 {
+  width: 60%;
+  font-size: 48px;
+  margin: 7rem auto 4rem auto;
+  text-align: center;
+}
+
+.tagline {
+  font-size: 24px;
+  margin: 0 auto 4rem auto;
+  text-align: center;
+  width: 40%;
+  margin: 2rem auto 4rem auto;
+}
+
+.features-container {
+  display: flex;
+  justify-content: space-around;
+  margin-left: 20vw;
+  margin-right: 20vw;
+  margin-top: 2rem;
+  margin-bottom: 5rem;
+}
+
+.column {
+  width: 35%;
+  padding: 20px;
+  border-radius: 5px;
+  list-style-type: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.without-buildkwik {
+  background-color: #ffdddd; /* Slight red background */
+}
+
+.with-buildkwik {
+  background-color: #ddffdd; /* Slight green background */
+}
+
+h3 {
+  margin-top: 0;
+}
+
+ul {
+  padding-left: 20px;
+  text-align: left;
+}
+
+.without-buildkwik li {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  color: #a30000; /* Darker red for text */
+}
+
+.with-buildkwik li {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  color: #006400; /* Darker green for text */
+}
+
+.list-icon {
+  margin-right: 10px;
+  color: #a30000; /* Darker red for icon */
+}
+
+.with-buildkwik .icon {
+  color: #006400; /* Darker green for icon */
+}

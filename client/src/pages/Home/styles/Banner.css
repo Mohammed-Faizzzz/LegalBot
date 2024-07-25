@@ -1,0 +1,48 @@
+/* Common Styles */
+.banner {
+  background-size: cover;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100vw;
+  box-sizing: border-box;
+  height: 13vh;
+  color: black;
+  padding: 0 1rem;
+  background-color: inherit;
+}
+
+.banner-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.logo-container {
+  flex: 0 1 auto; /* Fixed size for the logo container */
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 5vh;
+  pointer-events: none;
+  border-radius: 1rem;
+}
+
+.drawer-content {
+  flex: 1; /* Allow drawer content to grow */
+  display: flex;
+  justify-content: flex-end; /* Align items to the right */
+}
+
+.drawer-list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around; /* Space out list items */
+  width: auto; /* Adjust width according to the content */
+}
