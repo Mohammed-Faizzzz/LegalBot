@@ -1,0 +1,29 @@
+.list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align title to the left */
+    padding: 20px;
+    width: 90%;
+    margin-left: 1rem;
+}
+
+.list-title {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.image-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 4 images per row */
+    gap: 10px; /* Gap between images */
+    width: 100%;
+}
+
+.image {
+    /* width: 100%; */
+    /* height: 100%; */
+    object-fit: cover;
+    max-width: 30vw; /* Relative size for images */
+    border-radius: 5px; /* Optional: adds a slight border radius to images */
+}
