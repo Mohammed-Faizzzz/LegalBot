@@ -1,49 +1,86 @@
 import numpy as np
 import faiss
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 from sentence_transformers import SentenceTransformer
 import pickle
 import torch
+import torch.nn.functional as F
+from retrieval import retrieve_chunks
 import sys
 import os
+
+print("Script started")
+print(f"Current working directory: {os.getcwd()}")
 
 # Adjust paths for resources
 current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(current_dir)
 
+print(f"Current directory: {current_dir}")
+print(f"Project root: {project_root}")
+
 # Load the FAISS index and embeddings
-index = faiss.read_index(os.path.join(project_root, "legal_cases.index"))
-embeddings = np.load(os.path.join(project_root, 'embeddings.npy'))
-with open(os.path.join(project_root, 'all_chunks.pkl'), 'rb') as f:
+index_path = os.path.join(project_root, "legal_cases.index")
+embeddings_path = os.path.join(project_root, 'embeddings.npy')
+chunks_path = os.path.join(project_root, 'all_chunks.pkl')
+
+print(f"Loading index from: {index_path}")
+index = faiss.read_index(index_path)
+print(f"Loading embeddings from: {embeddings_path}")
+embeddings = np.load(embeddings_path)
+print(f"Loading chunks from: {chunks_path}")
+with open(chunks_path, 'rb') as f:
     chunks = pickle.load(f)
 
 # Load QA model and tokenizer
 model_path = os.path.join(current_dir, "my_qa_model")
-qa_model = AutoModelForSeq2SeqLM.from_pretrained(model_path)
+print(f"Loading model from: {model_path}")
+model = AutoModelForSeq2SeqLM.from_pretrained(model_path)
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-# Create QA pipeline
-qa_pipeline = pipeline("text2text-generation", model=qa_model, tokenizer=tokenizer, device=device)
+print(f"Using device: {device}")
+model.to(device)
 
 # Load embedding model
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2', device=device)
 
-def retrieve_chunks(question, index, chunks, embedding_model, k=5):
-    question_embedding = embedding_model.encode([question], show_progress_bar=False)
-    _, I = index.search(question_embedding, k)
-    return [chunks[i] for i in I[0]]
-
-def answer_question(question):
-    retrieved_chunks = retrieve_chunks(question, index, chunks, embedding_model)
-    context = " ".join(retrieved_chunks)
+def answer_question(question, confidence_threshold=0.1):
+    print(f"Received question: {question}")
+    # Retrieve relevant chunks
+    context = retrieve_chunks(question, index, chunks, embedding_model)
+    
+    # Prepare input
     input_text = f"question: {question} context: {context}"
-    
-    output = qa_pipeline(input_text, max_length=64, num_return_sequences=1)
-    
-    predicted_answer = output[0]['generated_text']
-    return predicted_answer
+    inputs = tokenizer(input_text, return_tensors="pt", max_length=512, truncation=True, padding="max_length")
+    inputs = {k: v.to(device) for k, v in inputs.items()}
+
+    # Generate answer
+    model.eval()
+    with torch.no_grad():
+        outputs = model.generate(**inputs, max_length=64, num_return_sequences=1, output_scores=True, return_dict_in_generate=True)
+
+    # Decode the generated answer
+    predicted_answer = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
+    if predicted_answer == "":
+        predicted_answer = "Unable to find an answer"
+
+    # Calculate confidence score
+    scores = torch.stack(outputs.scores, dim=1)
+    log_probs = F.log_softmax(scores, dim=-1)
+    token_log_probs = torch.gather(log_probs, -1, outputs.sequences[:, 1:].unsqueeze(-1)).squeeze(-1)
+    sequence_log_prob = token_log_probs.sum(dim=-1)
+    confidence = torch.exp(sequence_log_prob / outputs.sequences.shape[1]).item()
+
+    # Return the result
+    result = {
+        'predicted_answer': predicted_answer if confidence > confidence_threshold else "Unable to find an answer",
+        'confidence': confidence,
+    }
+
+    print(f"Generated answer: {result['predicted_answer']}")
+    print(f"Confidence: {result['confidence']:.4f}")
+    return result
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -51,75 +88,6 @@ if __name__ == "__main__":
         sys.exit(1)
     
     question = sys.argv[1]
-    print(f"Processing question: {question}")
-    answer = answer_question(question)
-    print(f"Answer: {answer}")
-
-
-
-#     import sys
-# import os
-# from sentence_transformers import SentenceTransformer
-# import torch
-# from transformers import AutoModelForQuestionAnswering, AutoTokenizer
-# import faiss
-# import numpy as np
-# import pickle
-# import logging
-
-# logging.basicConfig(level=logging.INFO)
-# logger = logging.getLogger(__name__)
-
-# # Adjust paths for resources
-# current_dir = os.path.dirname(os.path.abspath(__file__))
-# project_root = os.path.dirname(current_dir)
-
-# def load_resources():
-#     logger.info("Loading resources...")
-#     qa_model = AutoModelForQuestionAnswering.from_pretrained(os.path.join(current_dir, "my_qa_model"))
-#     tokenizer = AutoTokenizer.from_pretrained(os.path.join(current_dir, "my_qa_model"))
-#     embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-#     index = faiss.read_index(os.path.join(project_root, 'legal_cases.index'))
-#     with open(os.path.join(project_root, 'all_chunks.pkl'), 'rb') as f:
-#         chunks = pickle.load(f)
-#     logger.info("Resources loaded successfully.")
-#     return qa_model, tokenizer, embedding_model, index, chunks
-
-# def retrieve_context(question, embedding_model, index, chunks, top_k=5):
-#     logger.info(f"Retrieving context for question: {question}")
-#     question_embedding = embedding_model.encode([question], show_progress_bar=False)
-#     D, I = index.search(question_embedding, k=top_k)
-#     retrieved_chunks = [chunks[idx] for idx in I[0]]
-#     return " ".join(retrieved_chunks)
-
-# def answer_question(question, qa_model, tokenizer, embedding_model, index, chunks):
-#     logger.info(f"Generating answer for question: {question}")
-#     context = retrieve_context(question, embedding_model, index, chunks)
-    
-#     # Truncate the context to fit within the model's maximum sequence length
-#     max_length = 512  # This is typically the max length for BERT-based models
-#     inputs = tokenizer(question, context, truncation=True, max_length=max_length, return_tensors="pt")
-    
-#     with torch.no_grad():
-#         outputs = qa_model(**inputs)
-    
-#     answer_start = torch.argmax(outputs.start_logits)
-#     answer_end = torch.argmax(outputs.end_logits) + 1
-#     answer = tokenizer.decode(inputs.input_ids[0][answer_start:answer_end])
-    
-#     return answer
-
-# if __name__ == "__main__":
-#     if len(sys.argv) < 2:
-#         question = "What constitutes a breach of contract?"
-#     else:
-#         question = sys.argv[1]
-    
-#     try:
-#         print(f"Processing question: {question}")
-#         qa_model, tokenizer, embedding_model, index, chunks = load_resources()
-#         answer = answer_question(question, qa_model, tokenizer, embedding_model, index, chunks)
-#         print(f"Answer: {answer}")
-#     except Exception as e:
-#         print(f"An error occurred: {str(e)}")
-#         logger.exception("Detailed error information:")
+    result = answer_question(question)
+    print(f"Final Answer: {result['predicted_answer']}")
+    print(f"Confidence: {result['confidence']:.4f}")
