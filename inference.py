@@ -6,6 +6,8 @@ import pickle
 import torch
 import torch.nn.functional as F
 from retrieval import retrieve_chunks
+import re
+from extraction import clean_title
 
 # Load the FAISS index and embeddings
 index = faiss.read_index("legal_cases.index")
@@ -27,6 +29,15 @@ embedding_model = SentenceTransformer('all-MiniLM-L6-v2', device=device)
 def answer_question(question, confidence_threshold=0.1):
     # Retrieve relevant chunks
     context = retrieve_chunks(question, index, chunks, embedding_model)
+    title_pattern = r'\[ TITLE : .*?\[.*?\] SGHC \d+.*?\ ]'
+    titles = re.findall(title_pattern, context)
+    context = re.sub(title_pattern, '', context)
+
+    # remove duplicate titles
+    titles = list(set(titles))
+    titles = list(set(clean_title(title) for title in titles))
+
+    references = " You may find the following cases useful: " + ", ".join(titles) if titles else " No references found."
     
     # Prepare input
     input_text = f"question: {question} context: {context}"
@@ -41,7 +52,7 @@ def answer_question(question, confidence_threshold=0.1):
     # Decode the generated answer
     predicted_answer = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
     if predicted_answer == "":
-        predicted_answer = "Unable to find an answer"
+        predicted_answer = "Unable to find an answer."
 
     # Calculate confidence score
     scores = torch.stack(outputs.scores, dim=1)
@@ -52,8 +63,8 @@ def answer_question(question, confidence_threshold=0.1):
 
     # Return the result
     result = {
-        'predicted_answer': predicted_answer if confidence > confidence_threshold else 
-        predicted_answer + " However, the confidence is below the threshold, and the answer may not be reliable.",
+        'predicted_answer': predicted_answer + " " + references if confidence > confidence_threshold else 
+        predicted_answer + " However, the confidence is below the threshold, and the answer may not be reliable." + references,
         'confidence': confidence,
     }
 
