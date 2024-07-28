@@ -52,7 +52,8 @@ def answer_question(question, confidence_threshold=0.1):
 
     # Return the result
     result = {
-        'predicted_answer': predicted_answer if confidence > confidence_threshold else "Unable to find an answer",
+        'predicted_answer': predicted_answer if confidence > confidence_threshold else 
+        predicted_answer + " However, the confidence is below the threshold, and the answer may not be reliable.",
         'confidence': confidence,
     }
 
