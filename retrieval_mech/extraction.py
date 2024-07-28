@@ -69,6 +69,12 @@ def remove_title(text):
     cleaned_text = re.sub(r'\[TITLE:.*?\[.*?\] SGHC \d+.*?\]', '', text)
     return cleaned_text
 
+def clean_title(title):
+    # Remove '[ TITLE : ' from the beginning and ']' from the end
+    cleaned = title.replace('[ TITLE : ', '').rstrip(']')
+    # Remove any leading/trailing whitespace
+    return cleaned.strip()
+
 def preprocess_text(text):
     """
     Preprocesses the given text by converting it to lowercase, removing any lines containing "version no",
@@ -85,8 +91,3 @@ def preprocess_text(text):
     
     res = "".join([char for char in text if char.isalnum() or char.isspace()])
     return res
-
-
-pdf_path = "./../pdfs/[2024] SGHC 136.pdf"
-data = extract_data(pdf_path)
-print(data["Title"])
