@@ -1,4 +1,4 @@
-package com.example.legalbot;
+package com.example.LegalBot;
 
 import java.io.BufferedReader;
 import java.io.File;
