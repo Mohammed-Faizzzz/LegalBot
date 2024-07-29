@@ -1,7 +1,8 @@
 # LegalBot
 Run in the following order:
-1) index_embeddings.py
-2) gen_QA_dataset.py
-3) preprocess.py
-4) model.py
-5) eval.py
+1) scrape.py
+2) index_embeddings.py
+3) gen_QA_dataset.py
+4) preprocess.py
+5) model.py
+6) eval.py

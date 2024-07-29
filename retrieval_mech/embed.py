@@ -3,6 +3,7 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 from chunk import chunk_text
 import os
+import pickle
 
 def generate_embeddings():
     """
@@ -14,9 +15,10 @@ def generate_embeddings():
     Returns:
         numpy.ndarray: An array of embeddings generated for each text chunk.
     """
-    pdf_dir = './../pdfs'
-    pdf_files = [os.path.join(pdf_dir, file) for file in os.listdir(pdf_dir) if file.endswith('.pdf')]
-    chunks = chunk_text(pdf_files)
+    # pdf_dir = './../pdfs'
+    # pdf_files = [os.path.join(pdf_dir, file) for file in os.listdir(pdf_dir) if file.endswith('.pdf')]
+    # chunks = chunk_text(pdf_files)
+    chunks = pickle.load(open('all_chunks.pkl', 'rb'))
 
     model_name = "all-MiniLM-L6-v2"
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
