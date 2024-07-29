@@ -6,35 +6,29 @@ import './styles/FeaturesSection.css';
 const FeaturesSection = () => {
   return (
     <section id="features">
-      <h1>Repeatedly coding the same standard features for your app? There's a better way.</h1>
-      <p className='tagline'> As a hackathon enthusiast, I built BuildKwik to streamline repetitive coding tasks.
-          I was frustrated with writing the same features over and over. BuildKwik lets you
-          focus on your unique selling points instead of the mundane tasks, accelerating your
-          development process and bringing your ideas to life faster.
-        </p>
+      <h1>Tired of spending hours on legal research? There's a better way.</h1>
+      <p className='tagline'> We recognized the frustration legal professionals face when searching through countless documents for relevant precedents. That's why we created LexCelerate. Our AI-powered platform streamlines legal research, allowing lawyers to focus on building winning arguments instead of getting lost in document stacks. By collaborating with legal experts, we've developed a tool that accelerates research, bringing powerful insights to light faster and transforming how legal professionals work. </p>
       <div className="features-container">
         <div className="column without-buildkwik">
           <h3 style={{color:"#a30000"}}>Without BuildKwik</h3>
           <ul>
-            <li><CancelIcon className="list-icon" /> Manually coding every feature</li>
-            <li><CancelIcon className="list-icon" /> Inefficiencies and errors</li>
-            <li><CancelIcon className="list-icon" /> Inconsistent components</li>
-            <li><CancelIcon className="list-icon" /> Poor collaboration</li>
-            <li><CancelIcon className="list-icon" /> Disjointed tools</li>
-            <li><CancelIcon className="list-icon" /> Time-consuming integrations</li>
-            <li><CancelIcon className="list-icon" /> No performance insights</li>
-            <li><CancelIcon className="list-icon" /> Security concerns</li>
+            <li><CancelIcon className="list-icon" /> Manual searching through case law</li>
+            <li><CancelIcon className="list-icon" /> Time-consuming document review</li>
+            <li><CancelIcon className="list-icon" /> Risk of overlooking relevant precedents</li>
+            <li><CancelIcon className="list-icon" /> Inconsistent research results</li>
+            <li><CancelIcon className="list-icon" /> Limited access to comprehensive databases</li>
+            <li><CancelIcon className="list-icon" /> Challenges in cross-referencing multiple sources</li>
           </ul>
         </div>
         <div className="column with-buildkwik">
           <h3 style={{color:"#006400"}}>With BuildKwik</h3>
           <ul>
-            <li><CheckCircleIcon className="icon" /> Rapid prototyping</li>
-            <li><CheckCircleIcon className="icon" /> Reusable components</li>
-            <li><CheckCircleIcon className="icon" /> Better collaboration</li>
-            <li><CheckCircleIcon className="icon" /> Smooth integrations</li>
-            <li><CheckCircleIcon className="icon" /> Performance analytics</li>
-            <li><CheckCircleIcon className="icon" /> Secure environment</li>
+            <li><CheckCircleIcon className="icon" /> AI-powered rapid case law search</li>
+            <li><CheckCircleIcon className="icon" /> Efficient document analysis</li>
+            <li><CheckCircleIcon className="icon" /> Comprehensive precedent discovery</li>
+            <li><CheckCircleIcon className="icon" /> Consistent, reliable results</li>
+            <li><CheckCircleIcon className="icon" /> Access to vast legal databases</li>
+            <li><CheckCircleIcon className="icon" /> Seamless cross-referencing of sources</li>
           </ul>
         </div>
       </div>
