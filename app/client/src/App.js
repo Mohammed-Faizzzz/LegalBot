@@ -11,6 +11,7 @@ import FeaturesSection from './pages/Home/sections/FeaturesSection';
 import PricingSection from './pages/Home/sections/PricingSection';
 import TestimonialsSection from './pages/Home/sections/TestimonialsSection';
 import ContactSection from './pages/Home/sections/ContactSection';
+import FutureSection from './pages/Home/sections/FutureSection';
 
 const Home = () => (
   <div className="App">
@@ -19,6 +20,7 @@ const Home = () => (
       <HeroSection />
       <FeaturesSection />
       <PricingSection />
+      <FutureSection />
       {/* <TestimonialsSection /> */}
       {/* <ContactSection /> */}
     </div>
