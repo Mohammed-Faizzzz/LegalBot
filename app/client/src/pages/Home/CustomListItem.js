@@ -18,11 +18,13 @@ const CustomListItem = ({
   return (
     <>
       <ListItem onClick={onClick} className="custom-list-item">
-        <ListItemButton>
-          {/* <ListItemIcon className="list-item-icon">
-            <IconComponent/>
-          </ListItemIcon> */}
-          <ListItemText primary={primary} />
+        <ListItemButton className="custom-list-item-button">
+          {/* {IconComponent && (
+            <ListItemIcon className="list-item-icon">
+              <IconComponent />
+            </ListItemIcon>
+          )} */}
+          <ListItemText primary={primary} className="custom-list-item-text" />
         </ListItemButton>
       </ListItem>
       {expandable && (

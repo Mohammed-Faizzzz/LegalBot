@@ -2,18 +2,28 @@
   background-color: inherit;
   &:hover,
   &:active {
-    background-color: inherit; /* Remove hover and active background change */
+    background-color: inherit;
   }
 }
 
 .custom-list-item .MuiListItemText-primary {
-  font-weight: bold; /* Make primary text bold */
+  font-weight: bold;
 }
 
 .custom-list-item {
   border-radius: 1rem;
 }
 
-/* .list-item-icon {
+.custom-list-item-button {
+  white-space: nowrap;
+}
+
+.custom-list-item-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-item-icon {
   min-width: 40px;
-} */
+}
