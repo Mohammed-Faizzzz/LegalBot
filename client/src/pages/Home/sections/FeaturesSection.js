@@ -10,7 +10,7 @@ const FeaturesSection = () => {
       <p className='tagline'> We recognized the frustration legal professionals face when searching through countless documents for relevant precedents. That's why we created LexCelerate. Our AI-powered platform streamlines legal research, allowing lawyers to focus on building winning arguments instead of getting lost in document stacks. By collaborating with legal experts, we've developed a tool that accelerates research, bringing powerful insights to light faster and transforming how legal professionals work. </p>
       <div className="features-container">
         <div className="column without-buildkwik">
-          <h3 style={{color:"#a30000"}}>Without BuildKwik</h3>
+          <h3 style={{color:"#a30000"}}>Without LexCelerate</h3>
           <ul>
             <li><CancelIcon className="list-icon" /> Manual searching through case law</li>
             <li><CancelIcon className="list-icon" /> Time-consuming document review</li>
@@ -21,7 +21,7 @@ const FeaturesSection = () => {
           </ul>
         </div>
         <div className="column with-buildkwik">
-          <h3 style={{color:"#006400"}}>With BuildKwik</h3>
+          <h3 style={{color:"#006400"}}>With LexCelerate</h3>
           <ul>
             <li><CheckCircleIcon className="icon" /> AI-powered rapid case law search</li>
             <li><CheckCircleIcon className="icon" /> Efficient document analysis</li>
