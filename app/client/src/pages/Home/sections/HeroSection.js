@@ -6,9 +6,9 @@ const HeroSection = () => {
     <section id="hero">
       <div className="hero-main">
         <div className="hero-content">
-          <h1>Build Faster, Launch Sooner</h1>
-          <p>Accelerate your development process and bring your ideas to life faster than ever!</p>
-          <button>Get BuildKwik</button>
+          <h1>Accelerate Legal Research, Win Cases Faster</h1>
+          <p>Harness AI to find relevant legal precedents in seconds, not hours</p>
+          <button>Try Now</button>
         </div>
       </div>
       <div className="hero-side">

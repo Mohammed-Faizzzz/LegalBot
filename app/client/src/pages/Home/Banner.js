@@ -38,6 +38,7 @@ const Banner = () => {
                     </div>
                     <Box className='drawer-content'>
                         <List className='drawer-list'>
+                            <CustomListItem IconComponent={AccountCircleIcon} primary="Try It" />
                             <CustomListItem IconComponent={LiveHelpIcon} primary="Help" />
                             <CustomListItem
                                 IconComponent={AccountCircleIcon}
