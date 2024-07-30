@@ -4,47 +4,52 @@ import './styles/PricingSection.css';
 const PricingSection = () => {
   return (
     <section id="pricing">
-      <h2>Discover Our Pricing Plans</h2>
-      <p className='tagline'> Find the Perfect Plan for Your Needs</p>
+      <h2>Choose Your LexCelerate Plan</h2>
+      <p className='tagline'>Accelerate Your Legal Research with the Right Subscription</p>
       <div className="pricing-container">
-        <div className="pricing-plan">
-          {/* <h3>Basic</h3> */}
+        <div className="pricing-plan individual">
+          <h3>Individual</h3>
           <div className="price">
-            <h1>$5</h1><p>SGD</p>
+            <span className="amount">$99</span>
+            <span className="period">/month</span>
           </div>
           <ul>
-            <li>Access to basic components</li>
-            <li>Standard support</li>
-            <li>Single user license</li>
+            <li>AI-powered case law search</li>
+            <li>Document analysis</li>
+            <li>Access to legal databases</li>
+            <li>Basic support</li>
           </ul>
-          <button>Choose Plan</button>
+          <button>Start Free Trial</button>
         </div>
-        <div className="pricing-plan">
-          {/* <h3>Standard</h3> */}
+        <div className="pricing-plan team featured">
+          <div className="featured-label">Most Popular</div>
+          <h3>Team</h3>
           <div className="price">
-            <h1>$10</h1><p>SGD</p>
+            <span className="amount">$249</span>
+            <span className="period">/month</span>
           </div>
           <ul>
-            <li>Access to all components</li>
+            <li>All Individual features</li>
+            <li>Team collaboration tools</li>
+            <li>Advanced analytics</li>
             <li>Priority support</li>
-            <li>Team license (up to 5 users)</li>
-            <li>Regular updates</li>
+            <li>Up to 10 users</li>
           </ul>
-          <button>Choose Plan</button>
+          <button>Start Free Trial</button>
         </div>
-        <div className="pricing-plan">
-          {/* <h3>Premium</h3> */}
+        <div className="pricing-plan enterprise">
+          <h3>Enterprise</h3>
           <div className="price">
-            <h1>$20</h1><p>SGD</p>
+            <span className="amount">Custom</span>
           </div>
           <ul>
-            <li>Access to all components</li>
-            <li>24/7 Premium support</li>
-            <li>Enterprise license (unlimited users)</li>
-            <li>Regular updates</li>
-            <li>Access to exclusive features</li>
+            <li>All Team features</li>
+            <li>Custom integrations</li>
+            <li>Dedicated account manager</li>
+            <li>24/7 premium support</li>
+            <li>Unlimited users</li>
           </ul>
-          <button>Choose Plan</button>
+          <button>Contact Sales</button>
         </div>
       </div>
     </section>
