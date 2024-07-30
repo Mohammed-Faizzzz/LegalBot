@@ -26,6 +26,10 @@ const Banner = () => {
     };
     const logo = process.env.PUBLIC_URL + '/logo_full.png';
 
+    const navigateToChatbot = () => {
+        navigate('/chatbot');
+      };
+
     const isLoggedIn = false; // This should ideally come from a global state or context
 
     return (
@@ -38,7 +42,7 @@ const Banner = () => {
                     </div>
                     <Box className='drawer-content'>
                         <List className='drawer-list'>
-                            <CustomListItem IconComponent={AccountCircleIcon} primary="Try Now" />
+                            <CustomListItem IconComponent={AccountCircleIcon} onClick={navigateToChatbot} primary="Try Now" />
                             <CustomListItem IconComponent={LiveHelpIcon} primary="Help" />
                             <CustomListItem
                                 IconComponent={AccountCircleIcon}

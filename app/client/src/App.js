@@ -13,6 +13,8 @@ import TestimonialsSection from './pages/Home/sections/TestimonialsSection';
 import ContactSection from './pages/Home/sections/ContactSection';
 import FutureSection from './pages/Home/sections/FutureSection';
 
+import Chatbot from './pages/Chat/Chatbot';
+
 const Home = () => (
   <div className="App">
     <div className="App-body">
@@ -35,6 +37,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/chatbot" element={<Chatbot/>} />
       </Routes>
     </Router>
   );
