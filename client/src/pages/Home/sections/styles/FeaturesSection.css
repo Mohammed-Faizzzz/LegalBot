@@ -1,77 +1,101 @@
 #features {
-  padding: 20px;
+  padding: 40px 20px;
   text-align: center;
-  background-color: #f8f8f8; 
+  background: linear-gradient(to top, #2c1608 0%, #0f0f0f 100%);
+  color: #e0e0e0;
+  position: relative;
+}
+
+#features::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(to top, rgba(15, 15, 15, 0), #0f0f0f);
 }
 
 #features h1 {
-  width: 60%;
+  width: 70%;
   font-size: 48px;
-  margin: 7rem auto 4rem auto;
+  margin: 5rem auto 3rem auto;
   text-align: center;
 }
 
 .tagline {
   font-size: 24px;
-  margin: 0 auto 4rem auto;
-  text-align: center;
-  width: 40%;
+  width: 60%;
   margin: 2rem auto 4rem auto;
+  text-align: center;
+  color: #c0c0c0;
 }
 
 .features-container {
   display: flex;
   justify-content: space-around;
-  margin-left: 20vw;
-  margin-right: 20vw;
-  margin-top: 2rem;
-  margin-bottom: 5rem;
+  margin: 2rem auto 5rem auto;
+  max-width: 1200px;
 }
 
 .column {
-  width: 35%;
-  padding: 20px;
-  border-radius: 5px;
+  width: 45%;
+  padding: 30px;
+  border-radius: 10px;
   list-style-type: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.column:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 .without-buildkwik {
-  background-color: #ffdddd; /* Slight red background */
+  background-color: rgba(163, 0, 0, 0.1);
+  border: 1px solid #a30000;
 }
 
 .with-buildkwik {
-  background-color: #ddffdd; /* Slight green background */
+  background-color: rgba(0, 100, 0, 0.1);
+  border: 1px solid #006400;
 }
 
 h3 {
   margin-top: 0;
+  font-size: 28px;
+  margin-bottom: 20px;
 }
 
 ul {
-  padding-left: 20px;
+  padding-left: 0;
   text-align: left;
 }
 
-.without-buildkwik li {
+.without-buildkwik li, .with-buildkwik li {
   display: flex;
   align-items: center;
-  margin: 10px 0;
-  color: #a30000; /* Darker red for text */
+  margin: 15px 0;
+  font-size: 18px;
+}
+
+.without-buildkwik li {
+  color: #ff9999;
 }
 
 .with-buildkwik li {
-  display: flex;
-  align-items: center;
-  margin: 10px 0;
-  color: #006400; /* Darker green for text */
+  color: #99ff99;
+}
+
+.list-icon, .with-buildkwik .icon {
+  margin-right: 15px;
+  font-size: 24px;
 }
 
 .list-icon {
-  margin-right: 10px;
-  color: #a30000; /* Darker red for icon */
+  color: #ff6666;
 }
 
 .with-buildkwik .icon {
-  color: #006400; /* Darker green for icon */
+  color: #66ff66;
 }
