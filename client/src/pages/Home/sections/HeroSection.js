@@ -1,15 +1,19 @@
 import React from 'react';
 import './styles/HeroSection.css';
+import Banner from '../Banner';
 
 const HeroSection = () => {
   return (
     <section id="hero">
+      <div className="hero-container">
+      <Banner />
       <div className="hero-main">
         <div className="hero-content">
           <h1>LexCelerate.</h1>
           <p>Accelerate Legal Research, Win Cases Faster</p>
           <button>Try Now</button>
         </div>
+      </div>
       </div>
       {/* <div className="hero-side">
         <div className="user-guide">
