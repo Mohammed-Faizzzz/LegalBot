@@ -16,7 +16,7 @@ import FutureSection from './pages/Home/sections/FutureSection';
 const Home = () => (
   <div className="App">
     <div className="App-body">
-      <Banner />
+      {/* <Banner /> */}
       <HeroSection />
       <FeaturesSection />
       <PricingSection />
