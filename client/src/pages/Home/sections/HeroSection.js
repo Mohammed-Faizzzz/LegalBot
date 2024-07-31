@@ -1,16 +1,18 @@
 import React from 'react';
 import './styles/HeroSection.css';
 import Banner from '../Banner';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-// const navigate = useNavigate();
 
-const navigateToChatbot = () => {
-  // navigate('/chatbot');
-};
 
 
 const HeroSection = () => {
+  
+  const navigate = useNavigate();
+  const navigateToChatbot = () => {
+    navigate('/chatbot');
+  };
+
   return (
     <section id="hero">
       <div className="hero-container">
