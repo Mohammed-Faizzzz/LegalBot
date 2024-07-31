@@ -1,7 +1,7 @@
 {
-    "name": "buildkwik",
+    "name": "lexcelerate",
     "version": "1.0.0",
-    "description": "BuildKwik full-stack application",
+    "description": "LexCelerate full-stack application",
     "scripts": {
       "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
       "start:frontend": "cd client && npm start",
