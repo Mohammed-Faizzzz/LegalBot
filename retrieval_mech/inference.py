@@ -7,6 +7,9 @@ import torch.nn.functional as F
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
 
 # Load environment variables and configure Gemini API
 load_dotenv()
@@ -38,7 +41,9 @@ def generate_question_embedding(question):
         title="Embedding of question"
     )
     embedding = result['embedding']
-    return np.array(embedding).reshape(1, -1)
+    embedding_array = np.array(embedding).reshape(1, -1)
+    print(f"Question embedding dimensions: {embedding_array.shape}")
+    return embedding_array
 
 def retrieve_chunks(question, index, chunks, top_k=3):
     question_embedding = generate_question_embedding(question)
@@ -49,6 +54,9 @@ def retrieve_chunks(question, index, chunks, top_k=3):
 def answer_question(question, confidence_threshold=0.1):
     # Retrieve relevant chunks
     context = retrieve_chunks(question, index, chunks)
+    question_embedding = generate_question_embedding(question)
+    print(f"FAISS index dimensions: {index.d}")
+    print(f"Question embedding dimensions: {question_embedding.shape[1]}")
     
     # Prepare input
     input_text = f"question: {question} context: {context}"
@@ -80,19 +88,12 @@ def answer_question(question, confidence_threshold=0.1):
 
     return result
 
-def main():
-    print("Enter your query (type 'exit' to quit):")
-    while True:
-        user_query = input("Query: ")
-        if user_query.lower() == 'exit':
-            break
-        
-        # Get the answer from the QA model
-        result = answer_question(user_query)
-        
-        print(f"Answer: {result['predicted_answer']}")
-        print(f"Confidence: {result['confidence']:.4f}")
-        print()
+@app.route('/api/query', methods=['POST'])
+def handle_query():
+    data = request.json
+    question = data.get('query')
+    result = answer_question(question)
+    return jsonify(result)
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    app.run(port=5001)
