@@ -7,16 +7,34 @@ const ChatInterface = () => {
     { text: "Welcome to LexCelerate AI Assistant. How can I help you today?", isUser: false }
   ]);
 
-  const handleSendMessage = (message) => {
+  const API_URL = 'http://localhost:5000/api/query';
+
+  const handleSendMessage = async (message) => {
     setMessages([...messages, { text: message, isUser: true }]);
     
-    // Simulate AI response (replace with actual API call)
-    setTimeout(() => {
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: message }),
+      });
+      
+      const data = await response.json();
+      
       setMessages(prev => [...prev, { 
-        text: "I'm processing your request about legal precedents. Please allow me a moment to search our database.", 
+        text: data.predicted_answer, 
+        isUser: false,
+        confidence: data.confidence
+      }]);
+    } catch (error) {
+      console.error('Error:', error);
+      setMessages(prev => [...prev, { 
+        text: "Sorry, there was an error processing your request.", 
         isUser: false 
       }]);
-    }, 1000);
+    }
   };
 
   return (

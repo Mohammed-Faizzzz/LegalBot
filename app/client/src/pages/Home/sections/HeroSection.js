@@ -1,6 +1,14 @@
 import React from 'react';
 import './styles/HeroSection.css';
 import Banner from '../Banner';
+// import { useNavigate } from 'react-router-dom';
+
+// const navigate = useNavigate();
+
+const navigateToChatbot = () => {
+  // navigate('/chatbot');
+};
+
 
 const HeroSection = () => {
   return (
@@ -11,7 +19,7 @@ const HeroSection = () => {
         <div className="hero-content">
           <h1>LexCelerate.</h1>
           <p>Accelerate Legal Research, Win Cases Faster</p>
-          <button>Try Now</button>
+          <button onClick={navigateToChatbot}>Try Now</button>
         </div>
       </div>
       </div>
