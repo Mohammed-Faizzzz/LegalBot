@@ -40,8 +40,14 @@ def extract_data(pdf_path):
     # Extract Parties Involved
     last_page = doc.load_page(num_pages - 1)  # Page indexing starts from 0
     first_line = last_page.get_text("text").splitlines()[0]  # Extract the first line of text
-    
-    title = first_line + " " + title
+    second_line = last_page.get_text("text").splitlines()[2]  # Extract the second line of text
+    print(second_line)
+    #  if second line is a number, it is a page number and not a party involved
+    if second_line.isdigit():
+        title = first_line + " " + title
+    else:
+        title = first_line + " " + second_line + " " + title
+        
 
     # Find the second instance of the title match and remove anything before it
     title_matches = list(title_pattern.finditer(text))
@@ -62,6 +68,12 @@ def remove_title(text):
     # Use regular expression to remove [TITLE: ... [YYYY] SGHC XXX]
     cleaned_text = re.sub(r'\[TITLE:.*?\[.*?\] SGHC \d+.*?\]', '', text)
     return cleaned_text
+
+def clean_title(title):
+    # Remove '[ TITLE : ' from the beginning and ']' from the end
+    cleaned = title.replace('[ TITLE : ', '').rstrip(']')
+    # Remove any leading/trailing whitespace
+    return cleaned.strip()
 
 def preprocess_text(text):
     """
