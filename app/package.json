@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "description": "LexCelerate full-stack application",
     "scripts": {
-      "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+      "start": "cd server && npm start",
+      "heroku-postbuild": "cd client && npm install && npm run build && cd ../server && npm install",
       "start:frontend": "cd client && npm start",
       "start:backend": "cd server && npm start",
       "dev": "concurrently \"npm run dev:backend\" \"npm run start:frontend\"",
