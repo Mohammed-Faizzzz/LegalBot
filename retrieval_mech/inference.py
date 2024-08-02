@@ -8,6 +8,9 @@ import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
+from retrieval import retrieve_chunks
+import re
+from extraction import clean_title
 
 app = Flask(__name__)
 
@@ -17,6 +20,7 @@ API_KEY = os.getenv('API_KEY')
 if API_KEY is None:
     raise ValueError("API_KEY environment variable is not set")
 genai.configure(api_key=API_KEY)
+
 
 # Load the FAISS index and embeddings
 index = faiss.read_index("legal_cases.index")
@@ -53,10 +57,16 @@ def retrieve_chunks(question, index, chunks, top_k=3):
 
 def answer_question(question, confidence_threshold=0.1):
     # Retrieve relevant chunks
-    context = retrieve_chunks(question, index, chunks)
-    question_embedding = generate_question_embedding(question)
-    print(f"FAISS index dimensions: {index.d}")
-    print(f"Question embedding dimensions: {question_embedding.shape[1]}")
+    context = retrieve_chunks(question, index, chunks, embedding_model)
+    title_pattern = r'\[ TITLE : .*?\[.*?\] SGHC \d+.*?\ ]'
+    titles = re.findall(title_pattern, context)
+    context = re.sub(title_pattern, '', context)
+
+    # remove duplicate titles
+    titles = list(set(titles))
+    titles = list(set(clean_title(title) for title in titles))
+
+    references = " You may find the following cases useful: " + ", ".join(titles) if titles else " No references found."
     
     # Prepare input
     input_text = f"question: {question} context: {context}"
@@ -71,7 +81,7 @@ def answer_question(question, confidence_threshold=0.1):
     # Decode the generated answer
     predicted_answer = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
     if predicted_answer == "":
-        predicted_answer = "Unable to find an answer"
+        predicted_answer = "Unable to find an answer."
 
     # Calculate confidence score
     scores = torch.stack(outputs.scores, dim=1)
@@ -82,7 +92,8 @@ def answer_question(question, confidence_threshold=0.1):
 
     # Return the result
     result = {
-        'predicted_answer': predicted_answer if confidence > confidence_threshold else "Unable to find an answer",
+        'predicted_answer': predicted_answer + " " + references if confidence > confidence_threshold else 
+        predicted_answer + " However, the confidence is below the threshold, and the answer may not be reliable." + references,
         'confidence': confidence,
     }
 
