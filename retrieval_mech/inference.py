@@ -8,7 +8,6 @@ import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
-from retrieval import retrieve_chunks
 import re
 from extraction import clean_title
 
@@ -20,7 +19,6 @@ API_KEY = os.getenv('API_KEY')
 if API_KEY is None:
     raise ValueError("API_KEY environment variable is not set")
 genai.configure(api_key=API_KEY)
-
 
 # Load the FAISS index and embeddings
 index = faiss.read_index("legal_cases.index")
@@ -51,13 +49,13 @@ def generate_question_embedding(question):
 
 def retrieve_chunks(question, index, chunks, top_k=3):
     question_embedding = generate_question_embedding(question)
-    D, I = index.search(question_embedding, k=top_k)
+    D, I = index.search(question_embedding, top_k)
     retrieved_chunks = [chunks[idx] for idx in I[0]]
     return " ".join(retrieved_chunks)
 
 def answer_question(question, confidence_threshold=0.1):
     # Retrieve relevant chunks
-    context = retrieve_chunks(question, index, chunks, embedding_model)
+    context = retrieve_chunks(question, index, chunks)
     title_pattern = r'\[ TITLE : .*?\[.*?\] SGHC \d+.*?\ ]'
     titles = re.findall(title_pattern, context)
     context = re.sub(title_pattern, '', context)
@@ -81,7 +79,7 @@ def answer_question(question, confidence_threshold=0.1):
     # Decode the generated answer
     predicted_answer = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
     if predicted_answer == "":
-        predicted_answer = "Unable to find an answer."
+        predicted_answer = "I apologise - I can't seem to find an answer."
 
     # Calculate confidence score
     scores = torch.stack(outputs.scores, dim=1)
