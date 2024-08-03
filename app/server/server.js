@@ -13,7 +13,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const INFERENCE_URL = process.env.INFERENCE_URL || 'http://127.0.0.1:5001';
+// const INFERENCE_URL = process.env.INFERENCE_URL || 'http://127.0.0.1:5001';
+const INFERENCE_URL = process.env.INFERENCE_URL || 'https://lexcelerate-backend-62d07b64e13e.herokuapp.com/';
+
 
 app.post('/api/query', async (req, res) => {
   const { query } = req.body;
