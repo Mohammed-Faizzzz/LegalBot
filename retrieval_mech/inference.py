@@ -10,15 +10,74 @@ from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 import re
 from extraction import clean_title
+import boto3
+import io
+import functools
+import tempfile
+import shutil
 
 app = Flask(__name__)
 
-# Load environment variables and configure Gemini API
-load_dotenv()
-API_KEY = os.getenv('API_KEY')
-if API_KEY is None:
-    raise ValueError("API_KEY environment variable is not set")
-genai.configure(api_key=API_KEY)
+
+# Set up S3 client
+s3 = boto3.client('s3',
+    aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+    aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
+)
+bucket_name = os.getenv('S3_BUCKET_NAME')
+
+# Load files from S3 (with caching)
+@functools.lru_cache(maxsize=1)
+def load_from_s3(key):
+    obj = s3.get_object(Bucket=bucket_name, Key=key)
+    return obj['Body'].read()
+
+@functools.lru_cache(maxsize=1)
+def get_index():
+    index_bytes = load_from_s3('legal_cases.index')
+    return faiss.deserialize_index(index_bytes)
+
+@functools.lru_cache(maxsize=1)
+def get_embeddings():
+    embeddings_bytes = load_from_s3('embeddings.npy')
+    return np.load(io.BytesIO(embeddings_bytes))
+
+@functools.lru_cache(maxsize=1)
+def get_chunks():
+    chunks_bytes = load_from_s3('all_chunks.pkl')
+    return pickle.loads(chunks_bytes)
+
+@functools.lru_cache(maxsize=1)
+def get_model():
+    temp_dir = tempfile.mkdtemp()
+    try:
+        # List all objects in the my_qa_model folder
+        response = s3.list_objects_v2(Bucket=bucket_name, Prefix='my_qa_model/')
+        
+        # Download each file in the folder
+        for obj in response.get('Contents', []):
+            if obj['Key'].endswith('/'):  # Skip directories
+                continue
+            file_name = os.path.basename(obj['Key'])
+            local_file_path = os.path.join(temp_dir, file_name)
+            s3.download_file(bucket_name, obj['Key'], local_file_path)
+        
+        # Load the model from the temporary directory
+        model = AutoModelForSeq2SeqLM.from_pretrained(temp_dir)
+        return model
+    finally:
+        # Clean up the temporary directory
+        shutil.rmtree(temp_dir)
+
+# Load resources
+index = get_index()
+embeddings = get_embeddings()
+chunks = get_chunks()
+model = get_model()
+tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased-distilled-squad")
+
+# Configure Gemini API
+genai.configure(api_key=os.getenv('API_KEY'))
 
 # Load the FAISS index and embeddings
 index = faiss.read_index("legal_cases.index")
