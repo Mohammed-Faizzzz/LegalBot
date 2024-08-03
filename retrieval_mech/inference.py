@@ -15,9 +15,10 @@ import io
 import functools
 import tempfile
 import shutil
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 
 # Set up S3 client
 s3 = boto3.client('s3',
