@@ -1,0 +1,24 @@
+{
+  "name": "lexcelerate",
+  "version": "1.0.0",
+  "description": "LexCelerate full-stack application",
+  "scripts": {
+    "start": "cd server && npm start",
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "start:frontend": "cd client && npm start",
+    "start:backend": "cd server && npm start",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run start:frontend\"",
+    "dev:backend": "cd server && npm run dev",
+    "install": "cd server && npm install && cd ../client && npm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.0.1"
+  },
+  "dependencies": {
+    "axios": "^1.7.3",
+    "express": "^4.19.2"
+  }
+}

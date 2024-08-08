@@ -1,0 +1,29 @@
+.custom-list-item .MuiListItemButton-root {
+  background-color: inherit;
+  &:hover,
+  &:active {
+    background-color: inherit;
+  }
+}
+
+.custom-list-item .MuiListItemText-primary {
+  font-weight: bold;
+}
+
+.custom-list-item {
+  border-radius: 1rem;
+}
+
+.custom-list-item-button {
+  white-space: nowrap;
+}
+
+.custom-list-item-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-item-icon {
+  min-width: 40px;
+}
