@@ -31,7 +31,7 @@ const ChatInterface = () => {
     } catch (error) {
       console.error('Error:', error);
       setMessages(prev => [...prev, { 
-        text: "Sorry, there was an error processing your request.", 
+        text: "Sorry, there was an error processing your request. Using app.", 
         isUser: false 
       }]);
     }
