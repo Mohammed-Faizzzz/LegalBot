@@ -33,20 +33,29 @@ def load_from_s3(key):
     obj = s3.get_object(Bucket=bucket_name, Key=key)
     return obj['Body'].read()
 
-@functools.lru_cache(maxsize=1)
-def get_index():
-    index_bytes = load_from_s3('legal_cases.index')
-    return faiss.deserialize_index(index_bytes)
+# @functools.lru_cache(maxsize=1)
+# def get_index():
+#     index_bytes = load_from_s3('legal_cases.index')
+#     return faiss.deserialize_index(index_bytes)
 
-@functools.lru_cache(maxsize=1)
-def get_embeddings():
-    embeddings_bytes = load_from_s3('embeddings.npy')
-    return np.load(io.BytesIO(embeddings_bytes))
+# @functools.lru_cache(maxsize=1)
+# def get_embeddings():
+#     embeddings_bytes = load_from_s3('embeddings.npy')
+#     return np.load(io.BytesIO(embeddings_bytes))
 
-@functools.lru_cache(maxsize=1)
-def get_chunks():
-    chunks_bytes = load_from_s3('all_chunks.pkl')
-    return pickle.loads(chunks_bytes)
+# @functools.lru_cache(maxsize=1)
+# def get_chunks():
+#     chunks_bytes = load_from_s3('all_chunks.pkl')
+#     return pickle.loads(chunks_bytes)
+def load_index():
+    return faiss.read_index("legal_cases.index")
+
+def load_embeddings():
+    return np.load('embeddings.npy')
+
+def load_chunks():
+    with open('all_chunks.pkl', 'rb') as f:
+        return pickle.load(f)
 
 @functools.lru_cache(maxsize=1)
 def get_model():
@@ -71,9 +80,9 @@ def get_model():
         shutil.rmtree(temp_dir)
 
 # Load resources
-index = get_index()
-embeddings = get_embeddings()
-chunks = get_chunks()
+index = load_index()
+embeddings = load_embeddings()
+chunks = load_chunks()
 model = get_model()
 tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased-distilled-squad")
 
@@ -165,4 +174,5 @@ def handle_query():
     return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(port=5001)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
