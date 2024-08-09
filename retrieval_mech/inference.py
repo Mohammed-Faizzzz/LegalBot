@@ -246,6 +246,9 @@ model, tokenizer = initialize_app()
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model.to(device)
 
+# Configure Gemini API
+genai.configure(api_key=os.getenv('API_KEY'))
+
 def generate_question_embedding(question):
     model = "models/text-embedding-004"
     result = genai.embed_content(
