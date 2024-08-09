@@ -309,6 +309,11 @@ def answer_question(question, confidence_threshold=0.1):
 
     return result
 
+
+@app.route('/')
+def home():
+    return "LexCelerate Backend is running!"
+
 @app.route('/api/query', methods=['POST'])
 def handle_query():
     data = request.json
