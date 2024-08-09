@@ -19,7 +19,7 @@ app.post('/api/query', async (req, res) => {
   const { query } = req.body;
   try {
     console.log('Sending request to Python server...');
-    const response = await axios.post(`${INFERENCE_URL}/api/query`, { query });
+    const response = await axios.post(`${INFERENCE_URL}`, { query });
     console.log('Received response from Python server:', response.data);
     res.json(response.data);
   } catch (error) {
