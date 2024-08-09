@@ -198,49 +198,51 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+# Configuration
+S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
+S3_MODEL_KEY = 'my_qa_model/'
+LOCAL_MODEL_PATH = '/tmp/my_qa_model'
+LOCAL_INDEX_PATH = 'legal_cases.index'
+LOCAL_EMBEDDINGS_PATH = 'embeddings.npy'
+LOCAL_CHUNKS_PATH = 'all_chunks.pkl'
+
 # Set up S3 client
-s3 = boto3.client('s3',
-    aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
-    aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
-)
-bucket_name = 'lexcelerate'
+s3 = boto3.client('s3')
 
-# Helper function to download files from S3
-def download_from_s3(key, local_path):
-    s3.download_file(bucket_name, key, local_path)
+def download_model_from_s3():
+    """Download model from S3 and save it locally."""
+    if not os.path.exists(LOCAL_MODEL_PATH):
+        os.makedirs(LOCAL_MODEL_PATH)
 
-# Load the model from S3 into /tmp
-def load_model_from_s3():
-    model_dir = '/tmp/my_qa_model'
-    os.makedirs(model_dir, exist_ok=True)
-
-    # List and download all model files from S3
-    response = s3.list_objects_v2(Bucket=bucket_name, Prefix='my_qa_model/')
+    response = s3.list_objects_v2(Bucket=S3_BUCKET_NAME, Prefix=S3_MODEL_KEY)
     for obj in response.get('Contents', []):
-        if obj['Key'].endswith('/'):  # Skip directories
+        file_key = obj['Key']
+        if file_key.endswith('/'):
             continue
-        file_name = os.path.basename(obj['Key'])
-        local_file_path = os.path.join(model_dir, file_name)
-        download_from_s3(obj['Key'], local_file_path)
+        local_file_path = os.path.join(LOCAL_MODEL_PATH, os.path.basename(file_key))
+        s3.download_file(S3_BUCKET_NAME, file_key, local_file_path)
 
-    # Load the model
-    model = AutoModelForSeq2SeqLM.from_pretrained(model_dir)
-    return model
+def load_local_files():
+    """Load local files."""
+    global index, embeddings, chunks
+    index = faiss.read_index(LOCAL_INDEX_PATH)
+    embeddings = np.load(LOCAL_EMBEDDINGS_PATH)
+    with open(LOCAL_CHUNKS_PATH, 'rb') as f:
+        chunks = pickle.load(f)
 
-# Load model
-model = load_model_from_s3()
+def load_model():
+    """Load the QA model from the local path."""
+    model = AutoModelForSeq2SeqLM.from_pretrained(LOCAL_MODEL_PATH)
+    tokenizer = AutoTokenizer.from_pretrained(LOCAL_MODEL_PATH)
+    return model, tokenizer
 
-# Load embeddings, index, and chunks from local storage
-index = faiss.read_index("legal_cases.index")
-embeddings = np.load('embeddings.npy')
-with open('all_chunks.pkl', 'rb') as f:
-    chunks = pickle.load(f)
+# Initialize application
+def initialize_app():
+    download_model_from_s3()
+    load_local_files()
+    return load_model()
 
-tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased-distilled-squad")
-
-# Configure Gemini API
-genai.configure(api_key=os.getenv('API_KEY'))
-
+model, tokenizer = initialize_app()
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model.to(device)
 
@@ -316,4 +318,4 @@ def handle_query():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, threaded = True)
