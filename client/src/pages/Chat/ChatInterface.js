@@ -7,7 +7,7 @@ const ChatInterface = () => {
     { text: "Welcome to LexCelerate AI Assistant. How can I help you today?", isUser: false }
   ]);
 
-  const API_URL = 'http://localhost:5000/api/query';
+  const API_URL = 'api/query';
 
   const handleSendMessage = async (message) => {
     setMessages([...messages, { text: message, isUser: true }]);
