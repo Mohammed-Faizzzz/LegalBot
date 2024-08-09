@@ -1,7 +1,7 @@
-all_chunks.pkl
+# all_chunks.pkl
 chunks.pkl
-embeddings.npy
-legal_cases.index
+# embeddings.npy
+# legal_cases.index
 qa_dataset.json
 /__pycache__
 /dataset
