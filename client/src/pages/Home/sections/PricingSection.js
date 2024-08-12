@@ -10,7 +10,7 @@ const PricingSection = () => {
         <div className="pricing-plan individual">
           <h3>Individual</h3>
           <div className="price">
-            <span className="amount">$99</span>
+            <span className="amount">$9</span>
             <span className="period">/month</span>
           </div>
           <ul>
@@ -25,7 +25,7 @@ const PricingSection = () => {
           <div className="featured-label">Most Popular</div>
           <h3>Team</h3>
           <div className="price">
-            <span className="amount">$249</span>
+            <span className="amount">$29</span>
             <span className="period">/month</span>
           </div>
           <ul>

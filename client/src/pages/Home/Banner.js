@@ -21,7 +21,7 @@ const Banner = () => {
         if (isLoggedIn) {
         // Logic for logging out
         } else {
-        navigate('/login');
+        // navigate('/login');
         }
     };
     const logo = process.env.PUBLIC_URL + '/logo_full.png';
