@@ -13,7 +13,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const INFERENCE_URL = process.env.INFERENCE_URL || 'https://lexcelerate-backend-2df1e7da4d7c.herokuapp.com/api/query';
+const INFERENCE_URL = process.env.INFERENCE_URL || 'https://lexcelerate-inference-rn3lkigvjq-as.a.run.app/api/query';
 
 app.post('/api/query', async (req, res) => {
   const { query } = req.body;
