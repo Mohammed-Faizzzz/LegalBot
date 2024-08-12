@@ -11,7 +11,7 @@ const ChatInterface = () => {
 
   const handleSendMessage = async (message) => {
     setMessages([...messages, { text: message, isUser: true }]);
-    
+  
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -20,22 +20,38 @@ const ChatInterface = () => {
         },
         body: JSON.stringify({ query: message }),
       });
-      
-      const data = await response.json();
-      
-      setMessages(prev => [...prev, { 
-        text: data.predicted_answer, 
-        isUser: false,
-        confidence: data.confidence
-      }]);
+  
+      // Check if the response is JSON
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        const data = await response.json();
+  
+        setMessages((prev) => [
+          ...prev,
+          {
+            text: data.predicted_answer,
+            isUser: false,
+            confidence: data.confidence,
+          },
+        ]);
+      } else {
+        throw new Error('Response was not JSON');
+      }
     } catch (error) {
-      console.error('Error:', error);
-      setMessages(prev => [...prev, { 
-        text: "Sorry, there was an error processing your request.", 
-        isUser: false 
-      }]);
+      console.error('Error:', error.message);
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: 'Sorry, there was an error processing your request.',
+          isUser: false,
+        },
+      ]);
     }
-  };
+  };  
 
   return (
     <div className="chat-interface">
