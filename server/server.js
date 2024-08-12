@@ -13,14 +13,14 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const INFERENCE_URL = process.env.INFERENCE_URL || 'https://lexcelerate-inference-rn3lkigvjq-as.a.run.app/api/query';
+const INFERENCE_URL = process.env.INFERENCE_URL || 'https://lexcelerate-inference-rn3lkigvjq-as.a.run.app';
 
 app.post('/api/query', async (req, res) => {
   const { query } = req.body;
   try {
     console.log('INFERENCE_URL:', INFERENCE_URL);
     console.log('Sending request to Python server...');
-    const response = await axios.post(`${INFERENCE_URL}`, { query });
+    const response = await axios.post(`${INFERENCE_URL}/api/query`, { query });
     console.log('Received response from Python server:', response.data);
     res.json(response.data);
   } catch (error) {
