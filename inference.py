@@ -9,9 +9,15 @@ import os
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 import re
-from extraction import clean_title
+# from extraction import clean_title
 
 app = Flask(__name__)
+
+def clean_title(title):
+    # Remove '[ TITLE : ' from the beginning and ']' from the end
+    cleaned = title.replace('[ TITLE : ', '').rstrip(']')
+    # Remove any leading/trailing whitespace
+    return cleaned.strip()
 
 # Load environment variables and configure Gemini API
 load_dotenv()
@@ -105,4 +111,4 @@ def handle_query():
     return jsonify(result)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0", port=8080)
