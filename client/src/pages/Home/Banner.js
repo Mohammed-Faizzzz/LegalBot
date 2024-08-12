@@ -39,6 +39,7 @@ const Banner = () => {
                 <div className='banner-content'>
                     <div className='logo-container'>
                         <img src={logo} alt='logo' className='logo' onClick={handleHomeClick} />
+                        <span className="beta-disclaimer">Beta Version - Limited Functionality</span>
                     </div>
                     <Box className='drawer-content'>
                         <List className='drawer-list'>
