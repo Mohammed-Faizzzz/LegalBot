@@ -10,7 +10,9 @@ COPY server/package*.json ./server/
 COPY client/package*.json ./client/
 
 # Install dependencies for both frontend and backend
-RUN npm install && npm install --prefix server && npm install --prefix client
+RUN npm install && \
+    npm install --prefix server && \
+    npm install --prefix client
 
 # Copy the rest of the application files
 COPY . .
@@ -19,7 +21,7 @@ COPY . .
 RUN npm run build --prefix client
 
 # Expose port 8080 (for Google Cloud Run)
-EXPOSE 5000
+EXPOSE 8080
 
 # Start the server
-CMD ["npm", "start", "--prefix", "server"]
+CMD ["npm", "start"]
