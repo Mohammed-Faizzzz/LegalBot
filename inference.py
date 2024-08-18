@@ -4,12 +4,11 @@ from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 import pickle
 import torch
 import torch.nn.functional as F
-import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 import re
-# from extraction import clean_title
+from sentence_transformers import SentenceTransformer
 
 app = Flask(__name__)
 
@@ -19,12 +18,8 @@ def clean_title(title):
     # Remove any leading/trailing whitespace
     return cleaned.strip()
 
-# Load environment variables and configure Gemini API
+# Load environment variables
 load_dotenv()
-API_KEY = os.getenv('API_KEY')
-if API_KEY is None:
-    raise ValueError("API_KEY environment variable is not set")
-genai.configure(api_key=API_KEY)
 
 # Load the FAISS index and embeddings
 index = faiss.read_index("legal_cases.index")
@@ -40,26 +35,53 @@ tokenizer = AutoTokenizer.from_pretrained(model_path)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model.to(device)
 
-def generate_question_embedding(question):
-    model = "models/text-embedding-004"
-    result = genai.embed_content(
-        model=model,
-        content=question,
-        task_type="retrieval_document",
-        title="Embedding of question"
-    )
-    embedding = result['embedding']
+# Load the all-mpnet-base-v2 model
+embedding_model = SentenceTransformer('all-mpnet-base-v2')
+
+def generate_question_embedding(question, model):
+    """
+    Generates an embedding for a question using the all-mpnet-base-v2 model.
+
+    Args:
+        question (str): The question text.
+
+    Returns:
+        numpy.ndarray: The embedding generated for the question.
+    """
+    embedding = model.encode(question)
     embedding_array = np.array(embedding).reshape(1, -1)
     print(f"Question embedding dimensions: {embedding_array.shape}")
     return embedding_array
 
 def retrieve_chunks(question, index, chunks, top_k=3):
-    question_embedding = generate_question_embedding(question)
+    """
+    Retrieves the most relevant text chunks for a given question.
+
+    Args:
+        question (str): The question text.
+        index (faiss.Index): The FAISS index of the embeddings.
+        chunks (list): List of text chunks.
+        top_k (int): Number of top chunks to retrieve.
+
+    Returns:
+        str: A string containing the retrieved chunks concatenated.
+    """
+    question_embedding = generate_question_embedding(question, embedding_model)
     D, I = index.search(question_embedding, top_k)
     retrieved_chunks = [chunks[idx] for idx in I[0]]
     return " ".join(retrieved_chunks)
 
 def answer_question(question, confidence_threshold=0.1):
+    """
+    Answers a question by retrieving relevant chunks and using a QA model to generate an answer.
+
+    Args:
+        question (str): The question text.
+        confidence_threshold (float): Threshold for confidence below which the answer may not be reliable.
+
+    Returns:
+        dict: A dictionary containing the predicted answer and confidence.
+    """
     # Retrieve relevant chunks
     context = retrieve_chunks(question, index, chunks)
     title_pattern = r'\[ TITLE : .*?\[.*?\] SGHC \d+.*?\ ]'

@@ -19,3 +19,4 @@ index_embeddings.py
 model.py
 preprocess.py
 retrieval.py
+test_inference.py

@@ -91,7 +91,7 @@ def process_file(file_path):
 
 def main():
     all_chunks = []
-    for i in range(1, 192):  # From 1 to 191
+    for i in range(1, 212):  # From 1 to 211
         url = f"https://www.elitigation.sg/gd/s/2024_SGHC_{i}"
         print(f"Processing: {url}")
         download_and_process_judgment(url, all_chunks)

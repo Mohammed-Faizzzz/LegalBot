@@ -20,7 +20,7 @@ def generate_embeddings():
     # chunks = chunk_text(pdf_files)
     chunks = pickle.load(open('all_chunks.pkl', 'rb'))
 
-    model_name = "all-MiniLM-L6-v2"
+    model_name = "all-mpnet-base-v2"
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = SentenceTransformer(model_name, device=device)
 

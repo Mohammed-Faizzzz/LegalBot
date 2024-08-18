@@ -1,52 +1,44 @@
 import numpy as np
 from chunk import chunk_text
 import os
-import google.generativeai as genai
 from tqdm import tqdm
 import faiss
-from dotenv import load_dotenv
+from sentence_transformers import SentenceTransformer
 
-# Load environment variables and configure Gemini API
-load_dotenv() 
-API_KEY = os.getenv('API_KEY')
-if API_KEY is None:
-    raise ValueError("API_KEY environment variable is not set")
-genai.configure(api_key=API_KEY)
-
-def get_gemini_embedding(text):
+def get_mpnet_embedding(text, model):
     """
-    Generates an embedding for a single text chunk using Gemini API.
+    Generates an embedding for a single text chunk using the all-mpnet-base-v2 model.
 
     Args:
         text (str): A text chunk.
+        model (SentenceTransformer): The loaded sentence transformer model.
 
     Returns:
         numpy.ndarray: The embedding generated for the text chunk.
     """
-    model = "models/text-embedding-004"
-    result = genai.embed_content(
-        model=model,
-        content=text,
-        task_type="retrieval_document",
-        title="Embedding of text chunk"
-    )
-    embedding = result['embedding']
-    return np.array(embedding)
+    embedding = model.encode(text)
+    return embedding
 
 def generate_embeddings():
     """
-    Generates embeddings for a list of text chunks using Gemini API.
+    Generates embeddings for a list of text chunks using all-mpnet-base-v2 model.
 
     Returns:
         numpy.ndarray: An array of embeddings generated for each text chunk.
     """
+    # Load the all-mpnet-base-v2 model
+    model = SentenceTransformer('all-mpnet-base-v2')
+
+    # Define the directory containing PDF files
     pdf_dir = './../pdfs'
     pdf_files = [os.path.join(pdf_dir, file) for file in os.listdir(pdf_dir) if file.endswith('.pdf')]
+    
+    # Chunk the text from the PDF files
     chunks = chunk_text(pdf_files)
 
     embeddings = []
     for chunk in tqdm(chunks, desc="Generating embeddings"):
-        embedding = get_gemini_embedding(chunk)
+        embedding = get_mpnet_embedding(chunk, model)
         embeddings.append(embedding)
 
     embeddings = np.array(embeddings)
@@ -73,6 +65,6 @@ def index_embeddings():
     faiss.write_index(index, 'legal_cases.index')
     print(f"Indexed {index.ntotal} vectors of dimension {d}")
 
-
+# Generate embeddings and index them
 generate_embeddings()
 index_embeddings()
