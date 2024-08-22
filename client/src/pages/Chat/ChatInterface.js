@@ -6,12 +6,15 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState([
     { text: "Welcome to LexCelerate AI Assistant. How can I help you today?", isUser: false }
   ]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const API_URL = 'api/query';
 
   const handleSendMessage = async (message) => {
-    setMessages([...messages, { text: message, isUser: true }]);
-  
+    setMessages(prev => [...prev, { text: message, isUser: true }]);
+    setIsLoading(true);
+    setMessages(prev => [...prev, { text: "Loading...", isUser: false, isLoading: true }]);
+
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -20,18 +23,17 @@ const ChatInterface = () => {
         },
         body: JSON.stringify({ query: message }),
       });
-  
-      // Check if the response is JSON
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
+
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.includes('application/json')) {
         const data = await response.json();
-  
-        setMessages((prev) => [
-          ...prev,
+
+        setMessages(prev => [
+          ...prev.slice(0, -1), // Remove the loading message
           {
             text: data.predicted_answer,
             isUser: false,
@@ -43,13 +45,15 @@ const ChatInterface = () => {
       }
     } catch (error) {
       console.error('Error:', error.message);
-      setMessages((prev) => [
-        ...prev,
+      setMessages(prev => [
+        ...prev.slice(0, -1), // Remove the loading message
         {
           text: 'Sorry, there was an error processing your request.',
           isUser: false,
         },
       ]);
+    } finally {
+      setIsLoading(false);
     }
   };  
 
